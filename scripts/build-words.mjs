@@ -33,12 +33,31 @@ const CROSS_REFERENCE = new RegExp(`（${NESTED}[⇔⇒≒＝]${NESTED}）`, "g"
 const USAGE_NOTE = /〔[^〕]*〕/g;
 const LABEL = /【[^】]*】/g;
 
+const OPENERS = "（〔【［";
+const CLOSERS = "）〕】］";
+
+/**
+ * Splits on the first "；" that is not inside brackets. Entries such as
+ * 「（～に；...するのに）十分な（for；to do）」 use the separator inside a
+ * parenthetical, and a naive split would cut them in half.
+ */
+function firstSenseOf(meaning) {
+  let depth = 0;
+  for (let i = 0; i < meaning.length; i += 1) {
+    const char = meaning[i];
+    if (OPENERS.includes(char)) depth += 1;
+    else if (CLOSERS.includes(char)) depth = Math.max(0, depth - 1);
+    else if (char === "；" && depth === 0) return meaning.slice(0, i);
+  }
+  return meaning;
+}
+
 /**
  * The book lists every sense separated by "；", which is far too long for a test
  * row. Keep the first sense and drop book-only annotations.
  */
 function primaryMeaning(meaning) {
-  const firstSense = meaning.split("；")[0];
+  const firstSense = firstSenseOf(meaning);
   const trimmed = firstSense
     .replace(CROSS_REFERENCE, "")
     .replace(USAGE_NOTE, "")
