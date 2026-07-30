@@ -239,9 +239,10 @@
   }
 
   .printPage {
-    width: 100%;
-    aspect-ratio: 210 / 296;
-    margin: 0;
+    position: relative;
+    width: 189mm;
+    height: 267.3mm;
+    margin: 0 auto;
     overflow: hidden;
     break-after: page;
     page-break-after: always;
