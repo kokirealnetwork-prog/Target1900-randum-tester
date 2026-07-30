@@ -233,21 +233,22 @@
 @media print {
   .printRoot {
     display: block;
-    width: 210mm;
+    width: 100%;
     margin: 0;
     padding: 0;
   }
 
   .printPage {
-    width: 210mm;
-    height: 296mm;
+    width: 100%;
+    aspect-ratio: 210 / 296;
+    margin: 0;
     overflow: hidden;
-    break-inside: avoid;
-    page-break-inside: avoid;
+    break-after: page;
+    page-break-after: always;
   }
 
-  .printPage + .printPage {
-    break-before: page;
-    page-break-before: always;
+  .printPage:last-child {
+    break-after: auto;
+    page-break-after: auto;
   }
 }

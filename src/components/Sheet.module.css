@@ -179,7 +179,7 @@
 
 @media print {
   .sheet {
-    /* Leave a small tolerance for mobile-browser mm rounding. */
-    height: 296mm;
+    width: 100%;
+    height: 100%;
   }
 }

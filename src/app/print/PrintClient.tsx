@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { flushSync } from "react-dom";
 import { Sheet } from "@/components/Sheet";
 import { CheckCircleIcon, ChevronLeftIcon, PrinterIcon } from "@/components/icons";
 import { SheetThumbnail } from "./SheetThumbnail";
@@ -33,7 +32,6 @@ export function PrintClient({ config }: { config: QuizConfig }) {
   const [selectedSets, setSelectedSets] = useState<number[]>(() =>
     Array.from({ length: total }, (_, i) => i),
   );
-  const [printing, setPrinting] = useState(false);
 
   const orderedKinds = useMemo(
     () => KIND_LABELS.map((entry) => entry.kind).filter((kind) => activeKinds.includes(kind)),
@@ -61,16 +59,8 @@ export function PrintClient({ config }: { config: QuizConfig }) {
     return () => observer.disconnect();
   }, []);
 
-  useEffect(() => {
-    const done = () => setPrinting(false);
-    window.addEventListener("afterprint", done);
-    return () => window.removeEventListener("afterprint", done);
-  }, []);
-
   const handlePrint = () => {
-    // Mobile browsers require window.print() to run inside the original tap.
-    // Flush first so the full-resolution sheets exist before the dialog opens.
-    flushSync(() => setPrinting(true));
+    // Keep this direct: mobile browsers require print() in the original tap.
     window.print();
   };
 
@@ -189,15 +179,13 @@ export function PrintClient({ config }: { config: QuizConfig }) {
         </div>
       </main>
 
-      {printing ? (
-        <div className={styles.printRoot}>
-          {printSheets.map((sheet) => (
-            <div className={styles.printPage} key={sheet.key}>
-              <Sheet sheet={sheet} config={config} />
-            </div>
-          ))}
-        </div>
-      ) : null}
+      <div className={styles.printRoot} aria-hidden="true">
+        {printSheets.map((sheet) => (
+          <div className={styles.printPage} key={sheet.key}>
+            <Sheet sheet={sheet} config={config} />
+          </div>
+        ))}
+      </div>
     </>
   );
 }
