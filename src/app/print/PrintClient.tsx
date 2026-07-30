@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { flushSync } from "react-dom";
 import { Sheet } from "@/components/Sheet";
 import { CheckCircleIcon, ChevronLeftIcon, PrinterIcon } from "@/components/icons";
 import { SheetThumbnail } from "./SheetThumbnail";
@@ -60,21 +61,18 @@ export function PrintClient({ config }: { config: QuizConfig }) {
     return () => observer.disconnect();
   }, []);
 
-  // The full-size pages are only mounted while printing; rendering every sheet
-  // twice makes large batches sluggish on phones.
-  useEffect(() => {
-    if (!printing) return;
-    const frame = requestAnimationFrame(() => {
-      requestAnimationFrame(() => window.print());
-    });
-    return () => cancelAnimationFrame(frame);
-  }, [printing]);
-
   useEffect(() => {
     const done = () => setPrinting(false);
     window.addEventListener("afterprint", done);
     return () => window.removeEventListener("afterprint", done);
   }, []);
+
+  const handlePrint = () => {
+    // Mobile browsers require window.print() to run inside the original tap.
+    // Flush first so the full-resolution sheets exist before the dialog opens.
+    flushSync(() => setPrinting(true));
+    window.print();
+  };
 
   const toggleKind = (kind: SheetKind) =>
     setActiveKinds((current) =>
@@ -183,7 +181,7 @@ export function PrintClient({ config }: { config: QuizConfig }) {
             type="button"
             className={styles.primaryButton}
             disabled={printSheets.length === 0}
-            onClick={() => setPrinting(true)}
+            onClick={handlePrint}
           >
             <PrinterIcon />
             <span>印刷する</span>
