@@ -36,7 +36,7 @@ export function HomeClient({ initialConfig }: { initialConfig: QuizConfig }) {
     <main className={`${styles.page} screen-only`}>
       <div className={styles.shell}>
         <section className={styles.panel}>
-          <h1 className={styles.brand}>Target 1900 randum tester</h1>
+          <h1 className={`${styles.brand} brand-font`}>Target 1900 randum tester</h1>
 
           <div className={styles.field}>
             <span className={styles.fieldLabel}>範囲</span>
@@ -50,7 +50,6 @@ export function HomeClient({ initialConfig }: { initialConfig: QuizConfig }) {
               />
               <span className={styles.connector} aria-hidden="true">
                 <span className={styles.connectorLine} />
-                <span className={styles.connectorDot} />
               </span>
               <NumberPill
                 label="範囲の終わり"

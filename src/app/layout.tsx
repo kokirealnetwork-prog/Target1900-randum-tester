@@ -1,18 +1,16 @@
 import type { Metadata, Viewport } from "next";
-import { M_PLUS_Rounded_1c, Quicksand } from "next/font/google";
+import { Noto_Sans, Noto_Sans_JP } from "next/font/google";
 import "./globals.css";
 
-const quicksand = Quicksand({
-  variable: "--font-quicksand",
+const notoSans = Noto_Sans({
+  variable: "--font-sans",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
   display: "swap",
 });
 
-const rounded = M_PLUS_Rounded_1c({
-  variable: "--font-rounded",
+const notoSansJp = Noto_Sans_JP({
+  variable: "--font-sans-jp",
   subsets: ["latin"],
-  weight: ["400", "500", "700"],
   display: "swap",
 });
 
@@ -31,7 +29,7 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ja">
-      <body className={`${quicksand.variable} ${rounded.variable}`}>{children}</body>
+      <body className={`${notoSans.variable} ${notoSansJp.variable}`}>{children}</body>
     </html>
   );
 }

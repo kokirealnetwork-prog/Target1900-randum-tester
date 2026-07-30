@@ -92,7 +92,7 @@ export function Sheet({ sheet, config }: { sheet: SheetSpec; config: QuizConfig 
         ))}
       </div>
 
-      <div className={styles.footer}>Target 1900 randum tester</div>
+      <div className={`${styles.footer} brand-font`}>Target 1900 randum tester</div>
     </div>
   );
 }

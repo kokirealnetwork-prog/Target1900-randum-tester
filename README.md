@@ -24,6 +24,14 @@ npm run build
 npm run lint
 ```
 
+## フォント
+
+- 本文・数字は **Noto Sans / Noto Sans JP**（`next/font/google` で自動読み込み）
+- ロゴ「Target 1900 randum tester」は **Yikes**（YOMAGICK 作）。ライセンス上リポジトリに同梱していないので、
+  [配布元](https://2938369882508.gumroad.com/l/yikesyomagick) から入手して `public/fonts/Yikes.woff2`
+  （`.otf` / `.ttf` でも可）に置いてください。無い場合は Noto Sans で表示されます。
+  詳しくは `public/fonts/README.md` を参照。
+
 ## 単語データ
 
 `ターゲット1900.xlsx`（番号 / 単語 / 意味）が元データです。次のコマンドで
