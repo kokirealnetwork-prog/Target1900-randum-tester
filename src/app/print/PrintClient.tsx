@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Sheet } from "@/components/Sheet";
 import { CheckCircleIcon, ChevronLeftIcon, PrinterIcon } from "@/components/icons";
+import { SheetThumbnail } from "./SheetThumbnail";
 import {
   buildSheets,
   encodeConfig,
@@ -162,15 +163,12 @@ export function PrintClient({ config }: { config: QuizConfig }) {
                     {sheets
                       .filter((sheet) => sheet.setIndex === setIndex)
                       .map((sheet) => (
-                        <div
-                          className={styles.thumb}
+                        <SheetThumbnail
                           key={sheet.key}
-                          style={{ "--scale": thumbScale } as React.CSSProperties}
-                        >
-                          <div className={styles.thumbInner}>
-                            <Sheet sheet={sheet} config={config} />
-                          </div>
-                        </div>
+                          sheet={sheet}
+                          config={config}
+                          scale={thumbScale}
+                        />
                       ))}
                   </div>
                 </section>

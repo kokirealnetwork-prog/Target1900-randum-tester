@@ -17,7 +17,6 @@ export const ROWS_PER_COLUMN = 14;
 export const COLUMNS_PER_PAGE = 2;
 /** One 組 is exactly one A4 sheet, so the page capacity fixes the 組 count. */
 export const QUESTIONS_PER_SET = ROWS_PER_COLUMN * COLUMNS_PER_PAGE;
-export const MAX_COUNT = 200;
 
 export const DEFAULT_CONFIG: QuizConfig = {
   from: 1,
@@ -38,7 +37,8 @@ export function normalizeConfig(input: Partial<QuizConfig>): QuizConfig {
   return {
     from: low,
     to: high,
-    count: clamp(Math.round(input.count ?? DEFAULT_CONFIG.count), 1, Math.min(MAX_COUNT, available)),
+    // 問題数 is the whole draw, so the range itself is the only ceiling.
+    count: clamp(Math.round(input.count ?? DEFAULT_CONFIG.count), 1, available),
     mode: input.mode === "ja-en" ? "ja-en" : "en-ja",
     seed: (input.seed ?? DEFAULT_CONFIG.seed) >>> 0,
   };

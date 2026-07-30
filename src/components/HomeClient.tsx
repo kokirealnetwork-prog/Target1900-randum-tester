@@ -5,7 +5,6 @@ import { useMemo, useState } from "react";
 import { NumberPill } from "@/components/NumberPill";
 import { PencilIcon } from "@/components/icons";
 import {
-  MAX_COUNT,
   encodeConfig,
   normalizeConfig,
   toQuestion,
@@ -70,7 +69,7 @@ export function HomeClient({ initialConfig }: { initialConfig: QuizConfig }) {
                 label="問題数"
                 value={config.count}
                 min={1}
-                max={Math.min(MAX_COUNT, available)}
+                max={available}
                 onChange={(count) => update({ count })}
               />
             </div>
