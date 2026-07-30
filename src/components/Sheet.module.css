@@ -176,3 +176,10 @@
   color: #c4c4ca;
   letter-spacing: 0.04em;
 }
+
+@media print {
+  .sheet {
+    /* Leave a small tolerance for mobile-browser mm rounding. */
+    height: 296mm;
+  }
+}
