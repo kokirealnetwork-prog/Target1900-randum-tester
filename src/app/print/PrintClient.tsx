@@ -26,12 +26,20 @@ const KIND_LABELS: { kind: SheetKind; label: string }[] = [
 const A4_WIDTH_PX = (210 * 96) / 25.4;
 const THUMB_GAP_PX = 12;
 
+function isIOSDevice() {
+  return (
+    /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+    (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1)
+  );
+}
+
 export function PrintClient({ config }: { config: QuizConfig }) {
   const [activeKinds, setActiveKinds] = useState<SheetKind[]>(["question", "answer"]);
   const total = setCount(config);
   const [selectedSets, setSelectedSets] = useState<number[]>(() =>
     Array.from({ length: total }, (_, i) => i),
   );
+  const [preparingPdf, setPreparingPdf] = useState(false);
 
   const orderedKinds = useMemo(
     () => KIND_LABELS.map((entry) => entry.kind).filter((kind) => activeKinds.includes(kind)),
@@ -47,6 +55,7 @@ export function PrintClient({ config }: { config: QuizConfig }) {
   // Two sheets always sit side by side, so the thumbnail scale follows the
   // column width rather than a fixed breakpoint.
   const setsRef = useRef<HTMLDivElement>(null);
+  const printRootRef = useRef<HTMLDivElement>(null);
   const [thumbScale, setThumbScale] = useState(0.2);
   useEffect(() => {
     const element = setsRef.current;
@@ -59,9 +68,75 @@ export function PrintClient({ config }: { config: QuizConfig }) {
     return () => observer.disconnect();
   }, []);
 
-  const handlePrint = () => {
-    // Keep this direct: mobile browsers require print() in the original tap.
-    window.print();
+  const handlePrint = async () => {
+    if (!isIOSDevice()) {
+      window.print();
+      return;
+    }
+
+    // iOS WebKit can insert blank pages while printing HTML. Build a PDF with
+    // one image per selected sheet so the page count is fixed before AirPrint.
+    const pdfWindow = window.open("", "_blank");
+    if (!pdfWindow) {
+      window.alert("PDFを開けませんでした。ポップアップを許可して、もう一度お試しください。");
+      return;
+    }
+
+    pdfWindow.document.title = "PDFを作成中";
+    pdfWindow.document.body.innerHTML =
+      '<p style="font-family:system-ui,sans-serif;padding:24px">印刷用PDFを作成しています…</p>';
+
+    const printRoot = printRootRef.current;
+    if (!printRoot) {
+      pdfWindow.close();
+      return;
+    }
+
+    setPreparingPdf(true);
+    printRoot.classList.add(styles.pdfRendering);
+
+    try {
+      await document.fonts.ready;
+      const [{ default: html2canvas }, { jsPDF }] = await Promise.all([
+        import("html2canvas"),
+        import("jspdf"),
+      ]);
+      const pages = Array.from(
+        printRoot.querySelectorAll<HTMLElement>(`.${styles.printPage}`),
+      );
+      const pdf = new jsPDF({
+        orientation: "portrait",
+        unit: "mm",
+        format: "a4",
+        compress: true,
+      });
+
+      for (let index = 0; index < pages.length; index += 1) {
+        const canvas = await html2canvas(pages[index], {
+          backgroundColor: "#ffffff",
+          logging: false,
+          scale: 2,
+          useCORS: true,
+        });
+        if (index > 0) pdf.addPage("a4", "portrait");
+        pdf.addImage(canvas, "JPEG", 0, 0, 210, 297, undefined, "FAST");
+        canvas.width = 1;
+        canvas.height = 1;
+      }
+
+      const pdfUrl = URL.createObjectURL(pdf.output("blob"));
+      pdfWindow.location.replace(pdfUrl);
+      window.addEventListener("beforeunload", () => URL.revokeObjectURL(pdfUrl), {
+        once: true,
+      });
+    } catch (error) {
+      console.error("Failed to create print PDF", error);
+      pdfWindow.close();
+      window.alert("PDFの作成に失敗しました。もう一度お試しください。");
+    } finally {
+      printRoot.classList.remove(styles.pdfRendering);
+      setPreparingPdf(false);
+    }
   };
 
   const toggleKind = (kind: SheetKind) =>
@@ -170,16 +245,16 @@ export function PrintClient({ config }: { config: QuizConfig }) {
           <button
             type="button"
             className={styles.primaryButton}
-            disabled={printSheets.length === 0}
+            disabled={printSheets.length === 0 || preparingPdf}
             onClick={handlePrint}
           >
             <PrinterIcon />
-            <span>印刷する</span>
+            <span>{preparingPdf ? "PDFを作成中…" : "印刷する"}</span>
           </button>
         </div>
       </main>
 
-      <div className={styles.printRoot} aria-hidden="true">
+      <div className={styles.printRoot} aria-hidden="true" ref={printRootRef}>
         {printSheets.map((sheet) => (
           <div className={styles.printPage} key={sheet.key}>
             <Sheet sheet={sheet} config={config} />
