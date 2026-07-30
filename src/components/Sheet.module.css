@@ -181,7 +181,6 @@
   .sheet {
     width: 210mm;
     height: 297mm;
-    transform: scale(0.9);
-    transform-origin: top left;
+    zoom: 0.9;
   }
 }
