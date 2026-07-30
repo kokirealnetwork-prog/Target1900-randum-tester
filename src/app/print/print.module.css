@@ -162,7 +162,7 @@
 }
 
 .thumb {
-  --scale: 0.17;
+  --scale: 0.2;
   position: relative;
   flex: none;
   width: calc(210mm * var(--scale));
@@ -180,20 +180,6 @@
   height: 297mm;
   transform: scale(var(--scale));
   transform-origin: top left;
-}
-
-@media (min-width: 400px) {
-  .thumb {
-    --scale: 0.22;
-  }
-}
-
-.note {
-  margin: 26px 16px 0;
-  text-align: center;
-  font-size: 12px;
-  line-height: 1.7;
-  color: var(--muted);
 }
 
 .floatingBar {

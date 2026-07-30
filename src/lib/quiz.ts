@@ -7,25 +7,22 @@ export type QuizMode = "en-ja" | "ja-en";
 export type QuizConfig = {
   from: number;
   to: number;
-  /** Questions per set. */
+  /** Total questions across every 組. */
   count: number;
-  /** How many differently shuffled versions of the test to build. */
-  sets: number;
   mode: QuizMode;
   seed: number;
 };
 
 export const ROWS_PER_COLUMN = 14;
 export const COLUMNS_PER_PAGE = 2;
-export const QUESTIONS_PER_PAGE = ROWS_PER_COLUMN * COLUMNS_PER_PAGE;
+/** One 組 is exactly one A4 sheet, so the page capacity fixes the 組 count. */
+export const QUESTIONS_PER_SET = ROWS_PER_COLUMN * COLUMNS_PER_PAGE;
 export const MAX_COUNT = 200;
-export const MAX_SETS = 10;
 
 export const DEFAULT_CONFIG: QuizConfig = {
   from: 1,
   to: 300,
   count: 20,
-  sets: 3,
   mode: "en-ja",
   seed: 1,
 };
@@ -42,7 +39,6 @@ export function normalizeConfig(input: Partial<QuizConfig>): QuizConfig {
     from: low,
     to: high,
     count: clamp(Math.round(input.count ?? DEFAULT_CONFIG.count), 1, Math.min(MAX_COUNT, available)),
-    sets: clamp(Math.round(input.sets ?? DEFAULT_CONFIG.sets), 1, MAX_SETS),
     mode: input.mode === "ja-en" ? "ja-en" : "en-ja",
     seed: (input.seed ?? DEFAULT_CONFIG.seed) >>> 0,
   };
@@ -53,7 +49,6 @@ export function encodeConfig(config: QuizConfig): string {
     from: String(config.from),
     to: String(config.to),
     count: String(config.count),
-    sets: String(config.sets),
     mode: config.mode,
     seed: String(config.seed),
   }).toString();
@@ -70,14 +65,13 @@ export function decodeConfig(params: URLSearchParams | null): QuizConfig {
     from: num("from"),
     to: num("to"),
     count: num("count"),
-    sets: num("sets"),
     mode: params?.get("mode") === "ja-en" ? "ja-en" : "en-ja",
     seed: num("seed"),
   });
 }
 
 export type QuizQuestion = {
-  /** Position within its set, 1-based. */
+  /** Position within its 組, 1-based. */
   no: number;
   word: Word;
   prompt: string;
@@ -90,44 +84,31 @@ export type QuizSet = {
   questions: QuizQuestion[];
 };
 
-export function buildSet(config: QuizConfig, setIndex: number): QuizSet {
-  const pool = wordsInRange(config.from, config.to);
-  const rng = mulberry32((config.seed + setIndex * 0x9e3779b9) >>> 0);
-  const picked = sample(pool, config.count, rng);
+export function toQuestion(word: Word, mode: QuizMode, no: number): QuizQuestion {
+  const meaning = primaryMeaning(word);
   return {
-    index: setIndex,
-    questions: picked.map((word, i) => {
-      const meaning = primaryMeaning(word);
-      return {
-        no: i + 1,
-        word,
-        prompt: config.mode === "en-ja" ? word.en : meaning,
-        answer: config.mode === "en-ja" ? meaning : word.en,
-      };
-    }),
+    no,
+    word,
+    prompt: mode === "en-ja" ? word.en : meaning,
+    answer: mode === "en-ja" ? meaning : word.en,
   };
 }
 
+export function setCount(config: QuizConfig): number {
+  return Math.max(1, Math.ceil(config.count / QUESTIONS_PER_SET));
+}
+
+/** Draws every question at once, then cuts the list into one 組 per sheet. */
 export function buildSets(config: QuizConfig): QuizSet[] {
-  return Array.from({ length: config.sets }, (_, i) => buildSet(config, i));
-}
-
-/**
- * Splits a set across A4 pages, spreading questions evenly so the last page is
- * never left with a lone row.
- */
-export function paginate(questions: QuizQuestion[]): QuizQuestion[][] {
-  const pageCount = Math.max(1, Math.ceil(questions.length / QUESTIONS_PER_PAGE));
-  const perPage = Math.ceil(questions.length / pageCount);
-  return Array.from({ length: pageCount }, (_, i) => questions.slice(i * perPage, (i + 1) * perPage));
-}
-
-/** Splits one page's questions into the two printed columns. */
-export function splitColumns(questions: QuizQuestion[]): QuizQuestion[][] {
-  const perColumn = Math.ceil(questions.length / COLUMNS_PER_PAGE);
-  return Array.from({ length: COLUMNS_PER_PAGE }, (_, i) =>
-    questions.slice(i * perColumn, (i + 1) * perColumn),
-  ).filter((column) => column.length > 0);
+  const pool = wordsInRange(config.from, config.to);
+  const rng = mulberry32(config.seed);
+  const picked = sample(pool, config.count, rng);
+  return Array.from({ length: setCount(config) }, (_, index) => ({
+    index,
+    questions: picked
+      .slice(index * QUESTIONS_PER_SET, (index + 1) * QUESTIONS_PER_SET)
+      .map((word, i) => toQuestion(word, config.mode, i + 1)),
+  }));
 }
 
 export type SheetKind = "question" | "answer";
@@ -135,65 +116,25 @@ export type SheetKind = "question" | "answer";
 export type SheetSpec = {
   key: string;
   kind: SheetKind;
-  /** 0-based set index. */
+  /** 0-based 組 index; the 問題 and 答え sheets of one 組 share it. */
   setIndex: number;
-  pageInSet: number;
-  pagesInSet: number;
-  /** 1-based position among all sheets of the same kind. */
-  sheetNo: number;
-  sheetTotal: number;
+  setTotal: number;
   questions: QuizQuestion[];
 };
 
 export const SHEET_KINDS: SheetKind[] = ["question", "answer"];
 
-export type SheetSelection = {
-  kinds?: SheetKind[];
-  /** 0-based set indexes to include; omit for every set. */
-  setIndexes?: number[];
-};
-
-/** Sheets of the same kind are numbered continuously across the included sets. */
-export function buildSheets(config: QuizConfig, selection: SheetSelection = {}): SheetSpec[] {
-  const kinds = selection.kinds ?? SHEET_KINDS;
-  const sets = buildSets(config).filter(
-    (set) => !selection.setIndexes || selection.setIndexes.includes(set.index),
+export function buildSheets(config: QuizConfig, kinds: SheetKind[] = SHEET_KINDS): SheetSpec[] {
+  const sets = buildSets(config);
+  return sets.flatMap((set) =>
+    SHEET_KINDS.filter((kind) => kinds.includes(kind)).map((kind) => ({
+      key: `${kind}-${set.index}`,
+      kind,
+      setIndex: set.index,
+      setTotal: sets.length,
+      questions: set.questions,
+    })),
   );
-  const sheets: SheetSpec[] = [];
-  for (const kind of SHEET_KINDS) {
-    if (!kinds.includes(kind)) continue;
-    const pagesOfKind: Omit<SheetSpec, "sheetNo" | "sheetTotal">[] = [];
-    for (const set of sets) {
-      const pages = paginate(set.questions);
-      pages.forEach((questions, i) => {
-        pagesOfKind.push({
-          key: `${kind}-${set.index}-${i}`,
-          kind,
-          setIndex: set.index,
-          pageInSet: i + 1,
-          pagesInSet: pages.length,
-          questions,
-        });
-      });
-    }
-    pagesOfKind.forEach((page, i) => {
-      sheets.push({ ...page, sheetNo: i + 1, sheetTotal: pagesOfKind.length });
-    });
-  }
-  return sheets;
-}
-
-/** Groups sheets so one set's question and answer pages stay together. */
-export function groupBySet(sheets: SheetSpec[]): { setIndex: number; sheets: SheetSpec[] }[] {
-  const groups = new Map<number, SheetSpec[]>();
-  for (const sheet of sheets) {
-    const existing = groups.get(sheet.setIndex);
-    if (existing) existing.push(sheet);
-    else groups.set(sheet.setIndex, [sheet]);
-  }
-  return [...groups.entries()]
-    .sort((a, b) => a[0] - b[0])
-    .map(([setIndex, list]) => ({ setIndex, sheets: list }));
 }
 
 export function rangeLabel(config: QuizConfig): string {

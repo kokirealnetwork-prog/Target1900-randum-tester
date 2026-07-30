@@ -53,10 +53,10 @@ export function Sheet({ sheet, config }: { sheet: SheetSpec; config: QuizConfig 
 
         <div className={styles.pageNo}>
           <span className={styles.pageNoMain}>
-            <span className={styles.pageNoValue}>{sheet.sheetNo}</span>
+            <span className={styles.pageNoValue}>{sheet.setIndex + 1}</span>
             <span className={styles.pageNoUnit}>枚目</span>
           </span>
-          <span className={styles.pageNoTotal}>/ {sheet.sheetTotal}</span>
+          <span className={styles.pageNoTotal}>/ {sheet.setTotal}</span>
         </div>
       </div>
 

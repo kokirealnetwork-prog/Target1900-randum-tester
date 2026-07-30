@@ -3,18 +3,16 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { NumberPill } from "@/components/NumberPill";
-import { PencilIcon, ShuffleIcon } from "@/components/icons";
+import { PencilIcon } from "@/components/icons";
 import {
   MAX_COUNT,
-  MAX_SETS,
-  buildSet,
   encodeConfig,
   normalizeConfig,
+  toQuestion,
   type QuizConfig,
   type QuizMode,
 } from "@/lib/quiz";
-import { randomSeed } from "@/lib/random";
-import { FIRST_ID, LAST_ID, countInRange } from "@/lib/words";
+import { FIRST_ID, LAST_ID, countInRange, wordsInRange } from "@/lib/words";
 import styles from "./HomeClient.module.css";
 
 const MODE_OPTIONS: { mode: QuizMode; label: string }[] = [
@@ -30,8 +28,9 @@ export function HomeClient({ initialConfig }: { initialConfig: QuizConfig }) {
   const [draft, setDraft] = useState<QuizConfig>(initialConfig);
   const config = useMemo(() => normalizeConfig(draft), [draft]);
 
+  // The list is the plain word list for the chosen range, in book order.
+  const words = useMemo(() => wordsInRange(config.from, config.to), [config.from, config.to]);
   const available = countInRange(config.from, config.to);
-  const preview = useMemo(() => buildSet(config, 0), [config]);
   const update = (patch: Partial<QuizConfig>) => setDraft((current) => ({ ...current, ...patch }));
 
   return (
@@ -76,63 +75,43 @@ export function HomeClient({ initialConfig }: { initialConfig: QuizConfig }) {
               />
             </div>
             <div>
-              <span className={styles.fieldLabel}>組数</span>
-              <NumberPill
-                label="組数"
-                value={config.sets}
-                min={1}
-                max={MAX_SETS}
-                onChange={(sets) => update({ sets })}
-              />
+              <span className={styles.fieldLabel}>形式</span>
+              <div className={styles.toggle} role="group" aria-label="形式">
+                {MODE_OPTIONS.map((option) => (
+                  <button
+                    key={option.mode}
+                    type="button"
+                    className={`${styles.toggleOption} ${
+                      config.mode === option.mode ? styles.toggleOptionActive : ""
+                    }`}
+                    aria-pressed={config.mode === option.mode}
+                    onClick={() => update({ mode: option.mode })}
+                  >
+                    {option.label}
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
-
-          <div className={styles.field}>
-            <span className={styles.fieldLabel}>形式</span>
-            <div className={styles.toggle} role="group" aria-label="形式">
-              {MODE_OPTIONS.map((option) => (
-                <button
-                  key={option.mode}
-                  type="button"
-                  className={`${styles.toggleOption} ${
-                    config.mode === option.mode ? styles.toggleOptionActive : ""
-                  }`}
-                  aria-pressed={config.mode === option.mode}
-                  onClick={() => update({ mode: option.mode })}
-                >
-                  {option.label}
-                </button>
-              ))}
-            </div>
-            <p className={styles.hint}>
-              {config.mode === "en-ja" ? "英語を見て意味を書く" : "意味を見て英語を書く"}・
-              {available}語からランダム
-            </p>
           </div>
         </section>
 
         <div className={styles.listHeader}>
-          <span className={styles.setBadge}>{config.sets > 1 ? "1組目" : ""}</span>
+          <span />
           <span className={styles.listHeaderCell}>問題</span>
           <span className={styles.listHeaderCell}>答え</span>
-          <button
-            type="button"
-            className={styles.shuffleButton}
-            aria-label="出題し直す"
-            onClick={() => update({ seed: randomSeed() })}
-          >
-            <ShuffleIcon />
-          </button>
         </div>
 
         <ol className={styles.list}>
-          {preview.questions.map((question) => (
-            <li className={styles.row} key={question.no}>
-              <span className={styles.rowNo}>{question.no}</span>
-              <span className={styles.rowPrompt}>{question.prompt}</span>
-              <span className={styles.rowAnswer}>{question.answer}</span>
-            </li>
-          ))}
+          {words.map((word) => {
+            const question = toQuestion(word, config.mode, word.id);
+            return (
+              <li className={styles.row} key={word.id}>
+                <span className={styles.rowNo}>{word.id}</span>
+                <span className={styles.rowPrompt}>{question.prompt}</span>
+                <span className={styles.rowAnswer}>{question.answer}</span>
+              </li>
+            );
+          })}
         </ol>
       </div>
 

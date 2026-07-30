@@ -1,15 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Sheet } from "@/components/Sheet";
 import { CheckCircleIcon, ChevronLeftIcon, PrinterIcon } from "@/components/icons";
 import {
   buildSheets,
   encodeConfig,
-  groupBySet,
   modeLabel,
   rangeLabel,
+  setCount,
   type QuizConfig,
   type SheetKind,
 } from "@/lib/quiz";
@@ -20,10 +20,15 @@ const KIND_LABELS: { kind: SheetKind; label: string }[] = [
   { kind: "answer", label: "答え" },
 ];
 
+/** 210mm in CSS pixels, used to scale a full sheet down into a thumbnail. */
+const A4_WIDTH_PX = (210 * 96) / 25.4;
+const THUMB_GAP_PX = 12;
+
 export function PrintClient({ config }: { config: QuizConfig }) {
   const [activeKinds, setActiveKinds] = useState<SheetKind[]>(["question", "answer"]);
+  const total = setCount(config);
   const [selectedSets, setSelectedSets] = useState<number[]>(() =>
-    Array.from({ length: config.sets }, (_, i) => i),
+    Array.from({ length: total }, (_, i) => i),
   );
   const [printing, setPrinting] = useState(false);
 
@@ -32,17 +37,26 @@ export function PrintClient({ config }: { config: QuizConfig }) {
     [activeKinds],
   );
 
-  const previewGroups = useMemo(
-    () => groupBySet(buildSheets(config, { kinds: orderedKinds })),
-    [config, orderedKinds],
+  const sheets = useMemo(() => buildSheets(config, orderedKinds), [config, orderedKinds]);
+  const printSheets = useMemo(
+    () => sheets.filter((sheet) => selectedSets.includes(sheet.setIndex)),
+    [sheets, selectedSets],
   );
 
-  const printGroups = useMemo(
-    () => groupBySet(buildSheets(config, { kinds: orderedKinds, setIndexes: selectedSets })),
-    [config, orderedKinds, selectedSets],
-  );
-
-  const printSheets = useMemo(() => printGroups.flatMap((group) => group.sheets), [printGroups]);
+  // Two sheets always sit side by side, so the thumbnail scale follows the
+  // column width rather than a fixed breakpoint.
+  const setsRef = useRef<HTMLDivElement>(null);
+  const [thumbScale, setThumbScale] = useState(0.2);
+  useEffect(() => {
+    const element = setsRef.current;
+    if (!element) return;
+    const observer = new ResizeObserver(([entry]) => {
+      const width = entry.contentRect.width;
+      if (width > 0) setThumbScale((width - THUMB_GAP_PX) / 2 / A4_WIDTH_PX);
+    });
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, []);
 
   // The full-size pages are only mounted while printing; rendering every sheet
   // twice makes large batches sluggish on phones.
@@ -120,50 +134,49 @@ export function PrintClient({ config }: { config: QuizConfig }) {
                   aria-pressed={on}
                   onClick={() => toggleKind(kind)}
                 >
-                  <CheckCircleIcon filled={false} />
+                  <CheckCircleIcon />
                   {label}
                 </button>
               );
             })}
           </div>
 
-          <div className={styles.sets}>
-            {previewGroups.map((group) => {
-              const on = selectedSets.includes(group.setIndex);
+          <div className={styles.sets} ref={setsRef}>
+            {Array.from({ length: total }, (_, setIndex) => {
+              const on = selectedSets.includes(setIndex);
               return (
-                <section
-                  key={group.setIndex}
-                  className={`${styles.set} ${on ? "" : styles.setOff}`}
-                >
+                <section key={setIndex} className={`${styles.set} ${on ? "" : styles.setOff}`}>
                   <button
                     type="button"
                     className={`${styles.setToggle} ${on ? "" : styles.setToggleOff}`}
                     aria-pressed={on}
-                    onClick={() => toggleSet(group.setIndex)}
+                    onClick={() => toggleSet(setIndex)}
                   >
                     <CheckCircleIcon filled={on} />
                     <span className={styles.setLabel}>
-                      {group.setIndex + 1}
+                      {setIndex + 1}
                       <span className={styles.setLabelUnit}>組目</span>
                     </span>
                   </button>
                   <div className={styles.thumbs}>
-                    {group.sheets.map((sheet) => (
-                      <div className={styles.thumb} key={sheet.key}>
-                        <div className={styles.thumbInner}>
-                          <Sheet sheet={sheet} config={config} />
+                    {sheets
+                      .filter((sheet) => sheet.setIndex === setIndex)
+                      .map((sheet) => (
+                        <div
+                          className={styles.thumb}
+                          key={sheet.key}
+                          style={{ "--scale": thumbScale } as React.CSSProperties}
+                        >
+                          <div className={styles.thumbInner}>
+                            <Sheet sheet={sheet} config={config} />
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      ))}
                   </div>
                 </section>
               );
             })}
           </div>
-
-          <p className={styles.note}>
-            用紙 A4・余白なし・倍率100%で印刷してください。
-          </p>
         </div>
 
         <div className={styles.floatingBar}>

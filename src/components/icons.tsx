@@ -50,15 +50,3 @@ export function ChevronLeftIcon({ className }: IconProps) {
     </svg>
   );
 }
-
-export function ShuffleIcon({ className }: IconProps) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" width="17" height="17" aria-hidden="true" {...base}>
-      <path d="M4 7h3.5l3 4" />
-      <path d="M4 17h3.5l7-10H19" />
-      <path d="M13.5 17H19" />
-      <path d="M17 4.5 19.5 7 17 9.5" />
-      <path d="M17 14.5 19.5 17 17 19.5" />
-    </svg>
-  );
-}
