@@ -166,6 +166,29 @@
   overflow: hidden;
 }
 
+.sheetDense .column {
+  gap: 1.1mm;
+}
+
+.sheetDense .row {
+  min-height: 0;
+  max-height: none;
+  gap: 1.5mm;
+}
+
+.sheetDense .rowNo {
+  width: 6mm;
+  font-size: 7pt;
+}
+
+.sheetDense .box {
+  border-radius: 1.4mm;
+}
+
+.sheetDense .cell {
+  padding: 0 1.4mm;
+}
+
 .footer {
   flex: none;
   height: 11mm;

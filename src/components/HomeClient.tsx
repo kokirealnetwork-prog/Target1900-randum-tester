@@ -11,12 +11,12 @@ import {
   type QuizConfig,
   type QuizMode,
 } from "@/lib/quiz";
-import { FIRST_ID, LAST_ID, countInRange, wordsInRange } from "@/lib/words";
+import { FIRST_ID, LAST_ID, wordsInRange } from "@/lib/words";
 import styles from "./HomeClient.module.css";
 
 const MODE_OPTIONS: { mode: QuizMode; label: string }[] = [
-  { mode: "ja-en", label: "あA" },
-  { mode: "en-ja", label: "Aあ" },
+  { mode: "en-ja", label: "ENから日本語" },
+  { mode: "ja-en", label: "日本語からEN" },
 ];
 
 export function HomeClient({ initialConfig }: { initialConfig: QuizConfig }) {
@@ -29,7 +29,6 @@ export function HomeClient({ initialConfig }: { initialConfig: QuizConfig }) {
 
   // The list is the plain word list for the chosen range, in book order.
   const words = useMemo(() => wordsInRange(config.from, config.to), [config.from, config.to]);
-  const available = countInRange(config.from, config.to);
   const update = (patch: Partial<QuizConfig>) => setDraft((current) => ({ ...current, ...patch }));
 
   return (
@@ -61,43 +60,24 @@ export function HomeClient({ initialConfig }: { initialConfig: QuizConfig }) {
             </div>
           </div>
 
-          <div className={`${styles.field} ${styles.duo}`}>
-            <div>
-              <span className={styles.fieldLabel}>問題数</span>
-              <NumberPill
-                label="問題数"
-                value={config.count}
-                min={1}
-                max={available}
-                onChange={(count) => update({ count })}
-              />
-            </div>
-            <div>
-              <span className={styles.fieldLabel}>形式</span>
-              <div className={styles.toggle} role="group" aria-label="形式">
-                {MODE_OPTIONS.map((option) => (
-                  <button
-                    key={option.mode}
-                    type="button"
-                    className={`${styles.toggleOption} ${
-                      config.mode === option.mode ? styles.toggleOptionActive : ""
-                    }`}
-                    aria-pressed={config.mode === option.mode}
-                    onClick={() => update({ mode: option.mode })}
-                  >
-                    {option.label}
-                  </button>
-                ))}
-              </div>
+          <div className={styles.modeField}>
+            <div className={styles.toggle} role="group" aria-label="出題形式">
+              {MODE_OPTIONS.map((option) => (
+                <button
+                  key={option.mode}
+                  type="button"
+                  className={`${styles.toggleOption} ${
+                    config.mode === option.mode ? styles.toggleOptionActive : ""
+                  }`}
+                  aria-pressed={config.mode === option.mode}
+                  onClick={() => update({ mode: option.mode })}
+                >
+                  {option.label}
+                </button>
+              ))}
             </div>
           </div>
         </section>
-
-        <div className={styles.listHeader}>
-          <span />
-          <span className={styles.listHeaderCell}>問題</span>
-          <span className={styles.listHeaderCell}>答え</span>
-        </div>
 
         <ol className={styles.list}>
           {words.map((word) => {

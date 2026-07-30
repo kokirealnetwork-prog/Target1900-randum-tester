@@ -4,14 +4,15 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: 44px;
+  min-width: 0;
+  height: 48px;
   padding: 0 10px;
   border: none;
   border-radius: var(--radius-pill);
   background: var(--blue);
   color: #fff;
-  font-size: 20px;
-  font-weight: 600;
+  font-size: 28px;
+  font-weight: 400;
   text-align: center;
   letter-spacing: 0.02em;
   -moz-appearance: textfield;

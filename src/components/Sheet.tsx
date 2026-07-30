@@ -32,7 +32,11 @@ export function Sheet({ sheet, config }: { sheet: SheetSpec; config: QuizConfig 
   const columns = columnsOf(sheet.questions);
 
   return (
-    <div className={styles.sheet}>
+    <div
+      className={`${styles.sheet} ${
+        config.questionsPerPage === 50 ? styles.sheetDense : ""
+      }`}
+    >
       <div className={styles.header}>
         <div className={styles.legend}>
           <span className={`${styles.legendItem} ${showAnswers ? "" : styles.legendItemActive}`}>

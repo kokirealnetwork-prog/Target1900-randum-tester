@@ -1,6 +1,6 @@
 .page {
   min-height: 100dvh;
-  padding-bottom: 120px;
+  padding-bottom: 138px;
 }
 
 .shell {
@@ -9,14 +9,19 @@
 }
 
 .panel {
-  background: #fafafb;
+  position: sticky;
+  z-index: 30;
+  top: 0;
+  background: rgba(250, 250, 251, 0.96);
+  backdrop-filter: blur(20px) saturate(150%);
+  -webkit-backdrop-filter: blur(20px) saturate(150%);
   border-radius: 0 0 var(--radius-card) var(--radius-card);
-  padding: 26px 20px 26px;
-  box-shadow: var(--shadow-card);
+  padding: 78px 38px 38px;
+  box-shadow: 0 2px 7px rgba(30, 30, 45, 0.1);
 }
 
 .brand {
-  margin: 0 0 22px;
+  margin: 0 0 38px;
   text-align: center;
   font-size: 15px;
   font-weight: 500;
@@ -24,31 +29,28 @@
   color: var(--muted);
 }
 
-.field + .field {
-  margin-top: 18px;
-}
-
 .fieldLabel {
   display: block;
-  margin-bottom: 8px;
+  margin-bottom: 18px;
   text-align: center;
-  font-size: 13px;
+  font-size: 17px;
   font-weight: 500;
-  color: var(--muted-strong);
+  color: #57575e;
 }
 
 .rangeRow {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 18px;
 }
 
 .rangeRow > * {
   flex: 1;
+  min-width: 0;
 }
 
 .connector {
-  flex: 0 0 44px;
+  flex: 0 0 66px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -58,40 +60,54 @@
 
 .connectorLine {
   width: 100%;
-  height: 2px;
+  height: 1px;
   border-radius: 2px;
   background: var(--blue);
-  opacity: 0.55;
+  opacity: 0.85;
 }
 
-.duo {
-  display: flex;
-  gap: 14px;
+.connectorLine::before,
+.connectorLine::after {
+  position: absolute;
+  top: 50%;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--blue);
+  content: "";
+  transform: translateY(-50%);
 }
 
-.duo > * {
-  flex: 1;
-  min-width: 0;
+.connectorLine::before {
+  left: 0;
+}
+
+.connectorLine::after {
+  right: 0;
+}
+
+.modeField {
+  margin-top: 44px;
 }
 
 .toggle {
   display: flex;
-  height: 44px;
+  height: 48px;
   padding: 0;
   border-radius: var(--radius-pill);
-  background: #e6e6ea;
+  background: #c9c9cc;
   overflow: hidden;
 }
 
 .toggleOption {
   flex: 1;
+  min-width: 0;
   border: none;
   background: transparent;
-  border-radius: var(--radius-pill);
-  color: var(--muted-strong);
+  color: #fff;
   font-size: 16px;
   font-weight: 500;
-  letter-spacing: 0.04em;
+  letter-spacing: 0;
   transition: background 0.18s ease, color 0.18s ease;
 }
 
@@ -100,61 +116,52 @@
   color: #fff;
 }
 
-/* Mirrors the row grid below so the 問題 / 答え captions sit over their columns. */
-.listHeader {
-  display: grid;
-  grid-template-columns: 34px 1fr 1fr;
-  align-items: center;
-  padding: 26px 20px 12px;
-  font-size: 13px;
-  color: var(--muted);
-}
-
-.listHeaderCell {
-  text-align: center;
-}
-
 .list {
   list-style: none;
   margin: 0;
-  padding: 0 14px;
+  padding: 18px 20px 0;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 16px;
 }
 
 .row {
   display: grid;
-  grid-template-columns: 34px 1fr 1fr;
+  grid-template-columns: 64px 1fr 1.25fr;
   align-items: center;
-  min-height: 54px;
-  padding: 8px 6px;
-  border-radius: 16px;
+  min-height: 84px;
+  padding: 10px 14px;
+  border: 1px solid #e8e8eb;
+  border-radius: 18px;
   background: #fff;
-  box-shadow: var(--shadow-card);
+  box-shadow: 0 1px 4px rgba(30, 30, 45, 0.05);
 }
 
 .rowNo {
   text-align: center;
-  font-size: 12px;
+  font-size: 16px;
   color: var(--muted);
 }
 
 .rowPrompt,
 .rowAnswer {
+  min-width: 0;
   text-align: center;
-  font-size: 14px;
+  font-size: 18px;
   line-height: 1.35;
+  overflow: hidden;
   overflow-wrap: anywhere;
+  text-overflow: ellipsis;
 }
 
 .rowPrompt {
-  color: #6d6d75;
+  color: #46464d;
   font-weight: 500;
 }
 
 .rowAnswer {
-  color: #83838c;
+  color: #38383f;
+  font-weight: 500;
 }
 
 .floatingBar {
@@ -164,16 +171,17 @@
   bottom: 0;
   display: flex;
   justify-content: center;
-  padding: 18px 16px 22px;
+  padding: 18px 48px 22px;
   background: linear-gradient(to top, var(--bg) 58%, rgba(244, 244, 246, 0));
   pointer-events: none;
+  z-index: 40;
 }
 
 .primaryButton {
   pointer-events: auto;
   width: 100%;
-  max-width: 420px;
-  height: 62px;
+  max-width: 434px;
+  height: 112px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -182,9 +190,9 @@
   border-radius: var(--radius-pill);
   background: var(--blue);
   color: #fff;
-  font-size: 19px;
+  font-size: 30px;
   font-weight: 600;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.04em;
   box-shadow: var(--shadow-float);
   text-decoration: none;
   transition: transform 0.12s ease, background 0.15s ease;
@@ -193,4 +201,38 @@
 .primaryButton:active {
   transform: scale(0.985);
   background: var(--blue-dark);
+}
+
+.primaryButton svg {
+  width: 34px;
+  height: 34px;
+}
+
+@media (max-width: 420px) {
+  .panel {
+    padding-right: 28px;
+    padding-left: 28px;
+  }
+
+  .floatingBar {
+    padding-right: 28px;
+    padding-left: 28px;
+  }
+
+  .primaryButton {
+    height: 88px;
+    font-size: 25px;
+  }
+
+  .toggleOption {
+    font-size: 14px;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .panel {
+    background: #fafafb;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
 }

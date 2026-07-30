@@ -3,25 +3,26 @@ import { FIRST_ID, LAST_ID, countInRange, wordsInRange, type Word } from "./word
 
 /** `en-ja` shows the English word and asks for the meaning (Aあ). */
 export type QuizMode = "en-ja" | "ja-en";
+export type QuestionsPerPage = 25 | 50;
 
 export type QuizConfig = {
   from: number;
   to: number;
   /** Total questions across every 組. */
   count: number;
+  questionsPerPage: QuestionsPerPage;
   mode: QuizMode;
   seed: number;
 };
 
-export const ROWS_PER_COLUMN = 14;
 export const COLUMNS_PER_PAGE = 2;
-/** One 組 is exactly one A4 sheet, so the page capacity fixes the 組 count. */
-export const QUESTIONS_PER_SET = ROWS_PER_COLUMN * COLUMNS_PER_PAGE;
+export const QUESTIONS_PER_PAGE_OPTIONS: QuestionsPerPage[] = [25, 50];
 
 export const DEFAULT_CONFIG: QuizConfig = {
   from: 1,
   to: 300,
   count: 20,
+  questionsPerPage: 50,
   mode: "en-ja",
   seed: 1,
 };
@@ -39,6 +40,7 @@ export function normalizeConfig(input: Partial<QuizConfig>): QuizConfig {
     to: high,
     // 問題数 is the whole draw, so the range itself is the only ceiling.
     count: clamp(Math.round(input.count ?? DEFAULT_CONFIG.count), 1, available),
+    questionsPerPage: input.questionsPerPage === 25 ? 25 : 50,
     mode: input.mode === "ja-en" ? "ja-en" : "en-ja",
     seed: (input.seed ?? DEFAULT_CONFIG.seed) >>> 0,
   };
@@ -49,6 +51,7 @@ export function encodeConfig(config: QuizConfig): string {
     from: String(config.from),
     to: String(config.to),
     count: String(config.count),
+    questionsPerPage: String(config.questionsPerPage),
     mode: config.mode,
     seed: String(config.seed),
   }).toString();
@@ -65,6 +68,7 @@ export function decodeConfig(params: URLSearchParams | null): QuizConfig {
     from: num("from"),
     to: num("to"),
     count: num("count"),
+    questionsPerPage: num("questionsPerPage") === 25 ? 25 : 50,
     mode: params?.get("mode") === "ja-en" ? "ja-en" : "en-ja",
     seed: num("seed"),
   });
@@ -94,7 +98,7 @@ export function toQuestion(word: Word, mode: QuizMode, no: number): QuizQuestion
 }
 
 export function setCount(config: QuizConfig): number {
-  return Math.max(1, Math.ceil(config.count / QUESTIONS_PER_SET));
+  return Math.max(1, Math.ceil(config.count / config.questionsPerPage));
 }
 
 /** Draws every question at once, then cuts the list into one 組 per sheet. */
@@ -105,8 +109,13 @@ export function buildSets(config: QuizConfig): QuizSet[] {
   return Array.from({ length: setCount(config) }, (_, index) => ({
     index,
     questions: picked
-      .slice(index * QUESTIONS_PER_SET, (index + 1) * QUESTIONS_PER_SET)
-      .map((word, i) => toQuestion(word, config.mode, i + 1)),
+      .slice(
+        index * config.questionsPerPage,
+        (index + 1) * config.questionsPerPage,
+      )
+      .map((word, i) =>
+        toQuestion(word, config.mode, index * config.questionsPerPage + i + 1),
+      ),
   }));
 }
 
@@ -151,5 +160,5 @@ export function rangeLabel(config: QuizConfig): string {
 }
 
 export function modeLabel(mode: QuizMode): string {
-  return mode === "en-ja" ? "Aあ" : "あA";
+  return mode === "en-ja" ? "ENから日本語" : "日本語からEN";
 }

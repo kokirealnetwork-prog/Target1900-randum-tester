@@ -50,3 +50,14 @@ export function ChevronLeftIcon({ className }: IconProps) {
     </svg>
   );
 }
+
+export function ResetIcon({ className }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" {...base}>
+      <path d="M4.5 9A8 8 0 0 1 18 5.5L20.5 8" />
+      <path d="M20.5 4v4h-4" />
+      <path d="M19.5 15A8 8 0 0 1 6 18.5L3.5 16" />
+      <path d="M3.5 20v-4h4" />
+    </svg>
+  );
+}
