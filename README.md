@@ -24,6 +24,11 @@ npm run build
 npm run lint
 ```
 
+## デプロイ
+
+Vercel の "Import Git Repository" でこのリポジトリを選ぶだけで動きます。フレームワークは
+Next.js が自動検出され、環境変数もビルド設定の変更も要りません。
+
 ## フォント
 
 - 本文・数字は **Noto Sans / Noto Sans JP**（`next/font/google` で自動読み込み）
