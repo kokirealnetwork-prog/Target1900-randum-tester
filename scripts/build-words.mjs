@@ -1,5 +1,9 @@
 // ターゲット1900.xlsx -> src/data/target1900.json
 // Run with: npm run build:words
+//
+// The output is a compact [english, meaning] pair per entry; the array index
+// plus one is the word number. Meanings are trimmed down here so the app never
+// has to re-derive them at render time.
 
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
@@ -23,25 +27,48 @@ const toText = (value) => {
   return String(value ?? "").trim();
 };
 
-const words = [];
+const NESTED = "(?:[^（）]|（[^（）]*）)*";
+/** Cross references such as （⇔ decrease ⇒ 223） that only make sense in the book. */
+const CROSS_REFERENCE = new RegExp(`（${NESTED}[⇔⇒≒＝]${NESTED}）`, "g");
+const USAGE_NOTE = /〔[^〕]*〕/g;
+const LABEL = /【[^】]*】/g;
+
+/**
+ * The book lists every sense separated by "；", which is far too long for a test
+ * row. Keep the first sense and drop book-only annotations.
+ */
+function primaryMeaning(meaning) {
+  const firstSense = meaning.split("；")[0];
+  const trimmed = firstSense
+    .replace(CROSS_REFERENCE, "")
+    .replace(USAGE_NOTE, "")
+    .replace(LABEL, "")
+    .replace(/\s+/g, " ")
+    .trim();
+  return trimmed || firstSense.trim();
+}
+
+const entries = [];
 for (const row of rows) {
   const [, id, word, meaning] = row;
   if (typeof id !== "number") continue; // header row
   const en = toText(word);
-  const ja = toText(meaning);
+  const ja = primaryMeaning(toText(meaning));
   if (!en || !ja) throw new Error(`Incomplete row at id ${id}`);
-  words.push({ id, en, ja, isNew: toText(row[0]) === "新" });
+  entries.push({ id, pair: [en, ja] });
 }
 
-words.sort((a, b) => a.id - b.id);
+entries.sort((a, b) => a.id - b.id);
 
-for (const [index, entry] of words.entries()) {
+for (const [index, entry] of entries.entries()) {
   if (entry.id !== index + 1) {
     throw new Error(`Expected a gapless 1..N id sequence, got ${entry.id} at position ${index + 1}`);
   }
 }
 
-mkdirSync(dirname(OUTPUT), { recursive: true });
-writeFileSync(OUTPUT, `${JSON.stringify(words, null, 0)}\n`, "utf8");
+const json = `[\n${entries.map((entry) => JSON.stringify(entry.pair)).join(",\n")}\n]\n`;
 
-console.log(`Wrote ${words.length} words to ${OUTPUT}`);
+mkdirSync(dirname(OUTPUT), { recursive: true });
+writeFileSync(OUTPUT, json, "utf8");
+
+console.log(`Wrote ${entries.length} words to ${OUTPUT}`);

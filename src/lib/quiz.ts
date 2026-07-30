@@ -1,5 +1,5 @@
 import { mulberry32, sample } from "./random";
-import { FIRST_ID, LAST_ID, countInRange, primaryMeaning, wordsInRange, type Word } from "./words";
+import { FIRST_ID, LAST_ID, countInRange, wordsInRange, type Word } from "./words";
 
 /** `en-ja` shows the English word and asks for the meaning (Aあ). */
 export type QuizMode = "en-ja" | "ja-en";
@@ -85,12 +85,11 @@ export type QuizSet = {
 };
 
 export function toQuestion(word: Word, mode: QuizMode, no: number): QuizQuestion {
-  const meaning = primaryMeaning(word);
   return {
     no,
     word,
-    prompt: mode === "en-ja" ? word.en : meaning,
-    answer: mode === "en-ja" ? meaning : word.en,
+    prompt: mode === "en-ja" ? word.en : word.ja,
+    answer: mode === "en-ja" ? word.ja : word.en,
   };
 }
 
@@ -135,6 +134,16 @@ export function buildSheets(config: QuizConfig, kinds: SheetKind[] = SHEET_KINDS
       questions: set.questions,
     })),
   );
+}
+
+/** Paper comes out as every 問題 sheet first, then every 答え sheet. */
+export function sortForPrint(sheets: SheetSpec[]): SheetSpec[] {
+  return sheets
+    .slice()
+    .sort(
+      (a, b) =>
+        SHEET_KINDS.indexOf(a.kind) - SHEET_KINDS.indexOf(b.kind) || a.setIndex - b.setIndex,
+    );
 }
 
 export function rangeLabel(config: QuizConfig): string {

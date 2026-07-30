@@ -11,6 +11,7 @@ import {
   modeLabel,
   rangeLabel,
   setCount,
+  sortForPrint,
   type QuizConfig,
   type SheetKind,
 } from "@/lib/quiz";
@@ -40,7 +41,7 @@ export function PrintClient({ config }: { config: QuizConfig }) {
 
   const sheets = useMemo(() => buildSheets(config, orderedKinds), [config, orderedKinds]);
   const printSheets = useMemo(
-    () => sheets.filter((sheet) => selectedSets.includes(sheet.setIndex)),
+    () => sortForPrint(sheets.filter((sheet) => selectedSets.includes(sheet.setIndex))),
     [sheets, selectedSets],
   );
 

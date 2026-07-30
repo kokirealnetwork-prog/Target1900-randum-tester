@@ -149,12 +149,12 @@
 }
 
 .rowPrompt {
-  color: var(--text-strong);
+  color: #6d6d75;
   font-weight: 500;
 }
 
 .rowAnswer {
-  color: var(--text);
+  color: #83838c;
 }
 
 .floatingBar {
