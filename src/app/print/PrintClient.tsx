@@ -89,18 +89,18 @@ export function PrintClient({ config }: { config: QuizConfig }) {
                 <span>{rangeLabel(config)}</span>
                 <span>
                   {config.count}
-                  <span className={`${styles.titleUnit} jp`}>問</span>
+                  <span className={styles.titleUnit}>問</span>
                 </span>
-                <span className={`${styles.titleMode} jp`}>{modeLabel(config.mode)}</span>
+                <span className={styles.titleMode}>{modeLabel(config.mode)}</span>
               </h1>
               <span />
             </div>
 
             <div className={styles.summary}>
               <span className={styles.paper}>A4</span>
-              <span className={`${styles.counts} jp`}>
+              <span className={styles.counts}>
                 <span>
-                  <span className={styles.countValue}>{config.sets}</span>組
+                  <span className={styles.countValue}>{selectedSets.length}</span>組
                 </span>
                 <span>
                   <span className={styles.countValue}>{printSheets.length}</span>枚
@@ -116,7 +116,7 @@ export function PrintClient({ config }: { config: QuizConfig }) {
                 <button
                   key={kind}
                   type="button"
-                  className={`${styles.chip} ${on ? "" : styles.chipOff} jp`}
+                  className={`${styles.chip} ${on ? "" : styles.chipOff}`}
                   aria-pressed={on}
                   onClick={() => toggleKind(kind)}
                 >
@@ -142,7 +142,7 @@ export function PrintClient({ config }: { config: QuizConfig }) {
                     onClick={() => toggleSet(group.setIndex)}
                   >
                     <CheckCircleIcon filled={on} />
-                    <span className={`${styles.setLabel} jp`}>
+                    <span className={styles.setLabel}>
                       {group.setIndex + 1}
                       <span className={styles.setLabelUnit}>組目</span>
                     </span>
@@ -161,7 +161,7 @@ export function PrintClient({ config }: { config: QuizConfig }) {
             })}
           </div>
 
-          <p className={`${styles.note} jp`}>
+          <p className={styles.note}>
             用紙 A4・余白なし・倍率100%で印刷してください。
           </p>
         </div>
@@ -174,7 +174,7 @@ export function PrintClient({ config }: { config: QuizConfig }) {
             onClick={() => setPrinting(true)}
           >
             <PrinterIcon />
-            <span className="jp">印刷する</span>
+            <span>印刷する</span>
           </button>
         </div>
       </main>

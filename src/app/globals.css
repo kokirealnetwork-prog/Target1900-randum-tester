@@ -48,11 +48,6 @@ button {
   cursor: pointer;
 }
 
-/* Japanese text leans on the rounded face; latin keeps Quicksand. */
-.jp {
-  font-family: var(--font-rounded), system-ui, sans-serif;
-}
-
 @media print {
   html,
   body {

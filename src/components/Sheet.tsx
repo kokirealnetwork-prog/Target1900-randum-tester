@@ -34,7 +34,7 @@ export function Sheet({ sheet, config }: { sheet: SheetSpec; config: QuizConfig 
   return (
     <div className={styles.sheet}>
       <div className={styles.header}>
-        <div className={`${styles.legend} jp`}>
+        <div className={styles.legend}>
           <span className={`${styles.legendItem} ${showAnswers ? "" : styles.legendItemActive}`}>
             問題
           </span>
@@ -47,14 +47,14 @@ export function Sheet({ sheet, config }: { sheet: SheetSpec; config: QuizConfig 
           <span className={styles.range}>{rangeLabel(config)}</span>
           <span className={styles.count}>
             {config.count}
-            <span className={`${styles.countUnit} jp`}>問</span>
+            <span className={styles.countUnit}>問</span>
           </span>
         </div>
 
         <div className={styles.pageNo}>
           <span className={styles.pageNoMain}>
             <span className={styles.pageNoValue}>{sheet.sheetNo}</span>
-            <span className={`${styles.pageNoUnit} jp`}>枚目</span>
+            <span className={styles.pageNoUnit}>枚目</span>
           </span>
           <span className={styles.pageNoTotal}>/ {sheet.sheetTotal}</span>
         </div>
@@ -67,7 +67,7 @@ export function Sheet({ sheet, config }: { sheet: SheetSpec; config: QuizConfig 
               <div className={styles.row} key={question.no}>
                 <span className={styles.rowNo}>{question.no}</span>
                 <div className={styles.box}>
-                  <div className={`${styles.cell} jp`}>
+                  <div className={styles.cell}>
                     <span
                       className={styles.cellText}
                       style={{ fontSize: fitFontSize(question.prompt) }}
@@ -75,7 +75,7 @@ export function Sheet({ sheet, config }: { sheet: SheetSpec; config: QuizConfig 
                       {question.prompt}
                     </span>
                   </div>
-                  <div className={`${styles.cell} ${styles.cellAnswer} jp`}>
+                  <div className={`${styles.cell} ${styles.cellAnswer}`}>
                     {showAnswers ? (
                       <span
                         className={styles.cellText}

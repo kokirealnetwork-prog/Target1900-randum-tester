@@ -115,9 +115,11 @@
   color: var(--muted);
 }
 
+/* Mirrors the row grid below so the 問題 / 答え captions sit over their columns. */
 .listHeader {
+  position: relative;
   display: grid;
-  grid-template-columns: 34px 1fr 1fr 34px;
+  grid-template-columns: 34px 1fr 1fr;
   align-items: center;
   padding: 26px 20px 12px;
   font-size: 13px;
@@ -135,12 +137,14 @@
 }
 
 .shuffleButton {
+  position: absolute;
+  right: 14px;
+  bottom: 9px;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 30px;
   height: 30px;
-  margin-left: auto;
   border: none;
   border-radius: 50%;
   background: #ededf0;

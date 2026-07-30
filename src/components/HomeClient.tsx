@@ -41,7 +41,7 @@ export function HomeClient({ initialConfig }: { initialConfig: QuizConfig }) {
           <h1 className={styles.brand}>Target 1900 randum tester</h1>
 
           <div className={styles.field}>
-            <span className={`${styles.fieldLabel} jp`}>範囲</span>
+            <span className={styles.fieldLabel}>範囲</span>
             <div className={styles.rangeRow}>
               <NumberPill
                 label="範囲の始め"
@@ -66,7 +66,7 @@ export function HomeClient({ initialConfig }: { initialConfig: QuizConfig }) {
 
           <div className={`${styles.field} ${styles.duo}`}>
             <div>
-              <span className={`${styles.fieldLabel} jp`}>問題数</span>
+              <span className={styles.fieldLabel}>問題数</span>
               <NumberPill
                 label="問題数"
                 value={config.count}
@@ -76,7 +76,7 @@ export function HomeClient({ initialConfig }: { initialConfig: QuizConfig }) {
               />
             </div>
             <div>
-              <span className={`${styles.fieldLabel} jp`}>組数</span>
+              <span className={styles.fieldLabel}>組数</span>
               <NumberPill
                 label="組数"
                 value={config.sets}
@@ -88,7 +88,7 @@ export function HomeClient({ initialConfig }: { initialConfig: QuizConfig }) {
           </div>
 
           <div className={styles.field}>
-            <span className={`${styles.fieldLabel} jp`}>形式</span>
+            <span className={styles.fieldLabel}>形式</span>
             <div className={styles.toggle} role="group" aria-label="形式">
               {MODE_OPTIONS.map((option) => (
                 <button
@@ -104,7 +104,7 @@ export function HomeClient({ initialConfig }: { initialConfig: QuizConfig }) {
                 </button>
               ))}
             </div>
-            <p className={`${styles.hint} jp`}>
+            <p className={styles.hint}>
               {config.mode === "en-ja" ? "英語を見て意味を書く" : "意味を見て英語を書く"}・
               {available}語からランダム
             </p>
@@ -112,9 +112,9 @@ export function HomeClient({ initialConfig }: { initialConfig: QuizConfig }) {
         </section>
 
         <div className={styles.listHeader}>
-          <span className={`${styles.setBadge} jp`}>{config.sets > 1 ? "1組目" : ""}</span>
-          <span className={`${styles.listHeaderCell} jp`}>問題</span>
-          <span className={`${styles.listHeaderCell} jp`}>答え</span>
+          <span className={styles.setBadge}>{config.sets > 1 ? "1組目" : ""}</span>
+          <span className={styles.listHeaderCell}>問題</span>
+          <span className={styles.listHeaderCell}>答え</span>
           <button
             type="button"
             className={styles.shuffleButton}
@@ -129,8 +129,8 @@ export function HomeClient({ initialConfig }: { initialConfig: QuizConfig }) {
           {preview.questions.map((question) => (
             <li className={styles.row} key={question.no}>
               <span className={styles.rowNo}>{question.no}</span>
-              <span className={`${styles.rowPrompt} jp`}>{question.prompt}</span>
-              <span className={`${styles.rowAnswer} jp`}>{question.answer}</span>
+              <span className={styles.rowPrompt}>{question.prompt}</span>
+              <span className={styles.rowAnswer}>{question.answer}</span>
             </li>
           ))}
         </ol>
@@ -139,7 +139,7 @@ export function HomeClient({ initialConfig }: { initialConfig: QuizConfig }) {
       <div className={styles.floatingBar}>
         <Link className={styles.primaryButton} href={`/print?${encodeConfig(config)}`}>
           <PencilIcon />
-          <span className="jp">テストを作成</span>
+          <span>テストを作成</span>
         </Link>
       </div>
     </main>
