@@ -48,7 +48,7 @@ export function Sheet({ sheet, config }: { sheet: SheetSpec; config: QuizConfig 
         <div className={styles.title}>
           <span className={styles.range}>{rangeLabel(config)}</span>
           <span className={styles.count}>
-            {config.count}
+            <span className={styles.countNumber}>{config.count}</span>
             <span className={styles.countUnit}>問</span>
           </span>
         </div>

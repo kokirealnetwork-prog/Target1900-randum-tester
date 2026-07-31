@@ -177,7 +177,7 @@ export function PrintClient({ config }: { config: QuizConfig }) {
                 <ChevronLeftIcon />
               </Link>
               <h1 className={styles.title}>
-                <span>{rangeLabel(currentConfig)}</span>
+                <span className={styles.titleRange}>{rangeLabel(currentConfig)}</span>
                 <span className={styles.titleMode}>{modeLabel(currentConfig.mode)}</span>
               </h1>
               <span />

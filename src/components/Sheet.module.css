@@ -55,6 +55,16 @@
   letter-spacing: 0.02em;
 }
 
+.range,
+.countNumber,
+.pageNoValue,
+.pageNoTotal,
+.rowNo,
+.wordId {
+  font-family: var(--font-numeric), "Gen Interface JP", sans-serif;
+  font-variant-numeric: tabular-nums;
+}
+
 .count {
   font-size: 14pt;
   font-weight: 500;

@@ -1,5 +1,5 @@
-/* Drop the Yikes typeface into public/fonts/ to render the logo as designed;
-   until then the stack falls through to Noto Sans. */
+/* The visible brand is an outlined Yikes SVG; this remains as a fallback for
+   any future live-text use of the brand face. */
 @font-face {
   font-family: "Yikes";
   src:
@@ -48,14 +48,13 @@ html {
 body {
   background: var(--bg);
   color: var(--text);
-  font-family: var(--font-sans), var(--font-sans-jp), system-ui, sans-serif;
-  font-feature-settings: "palt" 1;
+  font-family: "Gen Interface JP", system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -webkit-text-size-adjust: 100%;
 }
 
 .brand-font {
-  font-family: "Yikes", var(--font-sans), var(--font-sans-jp), sans-serif;
+  font-family: "Yikes", "Gen Interface JP", sans-serif;
 }
 
 button,

@@ -11,8 +11,10 @@
   border-radius: var(--radius-pill);
   background: var(--blue);
   color: #fff;
+  font-family: var(--font-numeric), "Gen Interface JP", sans-serif;
   font-size: 20px;
   font-weight: 600;
+  font-variant-numeric: tabular-nums;
   text-align: center;
   letter-spacing: 0.02em;
   -moz-appearance: textfield;

@@ -188,7 +188,9 @@
 
 .rowNo {
   text-align: center;
+  font-family: var(--font-numeric), "Gen Interface JP", sans-serif;
   font-size: 12px;
+  font-variant-numeric: tabular-nums;
   color: var(--muted);
 }
 

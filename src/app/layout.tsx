@@ -1,17 +1,13 @@
 import type { Metadata, Viewport } from "next";
-import { Noto_Sans, Noto_Sans_JP } from "next/font/google";
+import { Google_Sans_Flex } from "next/font/google";
 import "./globals.css";
 
-const notoSans = Noto_Sans({
-  variable: "--font-sans",
+const googleSansFlex = Google_Sans_Flex({
+  variable: "--font-numeric",
+  weight: "variable",
   subsets: ["latin"],
   display: "swap",
-});
-
-const notoSansJp = Noto_Sans_JP({
-  variable: "--font-sans-jp",
-  subsets: ["latin"],
-  display: "swap",
+  adjustFontFallback: false,
 });
 
 export const metadata: Metadata = {
@@ -30,7 +26,17 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ja">
-      <body className={`${notoSans.variable} ${notoSansJp.variable}`}>{children}</body>
+      <head>
+        <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="anonymous" />
+        {[400, 500, 600, 700].map((weight) => (
+          <link
+            key={weight}
+            rel="stylesheet"
+            href={`https://cdn.jsdelivr.net/npm/gen-interface-jp@0.8.0/cdn/${weight}.css`}
+          />
+        ))}
+      </head>
+      <body className={googleSansFlex.variable}>{children}</body>
     </html>
   );
 }
