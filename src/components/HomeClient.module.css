@@ -42,6 +42,9 @@
   display: flex;
   align-items: center;
   gap: 10px;
+  width: 100%;
+  max-width: 396px;
+  margin: 0 auto;
 }
 
 .rangeRow > * {
@@ -50,7 +53,7 @@
 }
 
 .connector {
-  flex: 0 0 44px;
+  flex: 0 0 34px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -59,7 +62,7 @@
 }
 
 .connectorLine {
-  width: 100%;
+  width: 26px;
   height: 1px;
   border-radius: 2px;
   background: var(--blue);
@@ -79,15 +82,17 @@
 }
 
 .connectorLine::before {
-  left: 0;
+  left: 4px;
 }
 
 .connectorLine::after {
-  right: 0;
+  right: 4px;
 }
 
 .modeField {
-  margin-top: 18px;
+  width: 100%;
+  max-width: 396px;
+  margin: 28px auto 0;
 }
 
 .toggle {
@@ -114,6 +119,17 @@
 .toggleOptionActive {
   background: var(--blue);
   color: #fff;
+}
+
+.listHeader {
+  display: grid;
+  grid-template-columns: 34px 1fr 1fr;
+  align-items: center;
+  padding: 26px 20px 8px;
+  color: #aaaab0;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
 }
 
 .list {
@@ -221,6 +237,11 @@
 
   .toggleOption {
     font-size: 14px;
+  }
+
+  .listHeader {
+    padding-right: 14px;
+    padding-left: 14px;
   }
 }
 

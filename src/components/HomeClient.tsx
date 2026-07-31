@@ -79,6 +79,12 @@ export function HomeClient({ initialConfig }: { initialConfig: QuizConfig }) {
           </div>
         </section>
 
+        <div className={styles.listHeader} aria-hidden="true">
+          <span />
+          <span>問題</span>
+          <span>答え</span>
+        </div>
+
         <ol className={styles.list}>
           {words.map((word) => {
             const question = toQuestion(word, config.mode, word.id);

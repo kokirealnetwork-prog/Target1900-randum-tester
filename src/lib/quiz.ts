@@ -156,7 +156,7 @@ export function sortForPrint(sheets: SheetSpec[]): SheetSpec[] {
 }
 
 export function rangeLabel(config: QuizConfig): string {
-  return `${config.from}－${config.to}`;
+  return `${config.from}-${config.to}`;
 }
 
 export function modeLabel(mode: QuizMode): string {
