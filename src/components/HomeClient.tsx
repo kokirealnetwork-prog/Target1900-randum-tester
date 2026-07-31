@@ -71,6 +71,12 @@ export function HomeClient({ initialConfig }: { initialConfig: QuizConfig }) {
 
           <div className={styles.modeField}>
             <div className={styles.toggle} role="group" aria-label="出題形式">
+              <span
+                className={`${styles.toggleIndicator} ${
+                  config.mode === "ja-en" ? styles.toggleIndicatorSecond : ""
+                }`}
+                aria-hidden="true"
+              />
               {MODE_OPTIONS.map((option) => (
                 <button
                   key={option.mode}

@@ -112,6 +112,7 @@
 }
 
 .toggle {
+  position: relative;
   display: flex;
   height: 44px;
   padding: 0;
@@ -120,7 +121,23 @@
   overflow: hidden;
 }
 
+.toggleIndicator {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 50%;
+  border-radius: var(--radius-pill);
+  background: var(--blue);
+  transform: translateX(0);
+  transition: transform 0.22s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.toggleIndicatorSecond {
+  transform: translateX(100%);
+}
+
 .toggleOption {
+  position: relative;
+  z-index: 1;
   flex: 1;
   min-width: 0;
   border: none;
@@ -130,11 +147,10 @@
   font-size: 16px;
   font-weight: 500;
   letter-spacing: 0;
-  transition: background 0.18s ease, color 0.18s ease;
+  transition: color 0.18s ease;
 }
 
 .toggleOptionActive {
-  background: #4d7cfd;
   color: #fff;
 }
 
@@ -167,7 +183,7 @@
   border: 1px solid #e8e8eb;
   border-radius: 16px;
   background: #fff;
-  box-shadow: 0 1px 4px rgba(30, 30, 45, 0.05);
+  box-shadow: 0 1px 2px rgba(30, 30, 45, 0.025);
 }
 
 .rowNo {
@@ -269,5 +285,11 @@
     background: #fafafb;
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toggleIndicator {
+    transition: none;
   }
 }

@@ -210,6 +210,14 @@ export function PrintClient({ config }: { config: QuizConfig }) {
             <div className={styles.controlRow}>
               <span className={styles.controlLabel}>1ページあたりの問題数</span>
               <div className={styles.pageSizeToggle} role="group" aria-label="1ページあたりの問題数">
+                <span
+                  className={`${styles.pageSizeIndicator} ${
+                    currentConfig.questionsPerPage === 50
+                      ? styles.pageSizeIndicatorSecond
+                      : ""
+                  }`}
+                  aria-hidden="true"
+                />
                 {QUESTIONS_PER_PAGE_OPTIONS.map((value) => (
                   <button
                     key={value}
