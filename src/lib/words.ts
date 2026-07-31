@@ -1,4 +1,6 @@
 import target1900Data from "@/data/target1900.json";
+import pass2Data from "@/data/pass2.json";
+import passPre1Data from "@/data/passPre1.json";
 
 export type Word = {
   id: number;
@@ -6,7 +8,7 @@ export type Word = {
   ja: string;
 };
 
-export type WordbookId = "target1900" | "pass2" | "passPre2";
+export type WordbookId = "target1900" | "pass2" | "passPre1";
 
 export type Wordbook = {
   id: WordbookId;
@@ -16,19 +18,17 @@ export type Wordbook = {
   words: Word[];
 };
 
-const target1900Words: Word[] = (target1900Data as [string, string][]).map(
-  ([en, ja], index) => ({
+const toWords = (data: [string, string][]): Word[] =>
+  data.map(([en, ja], index) => ({
     id: index + 1,
     en,
     ja,
-  }),
-);
+  }));
 
-/**
- * Additional books are registered before their datasets arrive so the selector
- * and URL format stay stable. Their buttons remain disabled until licensed
- * word/meaning data is supplied by the user.
- */
+const target1900Words = toWords(target1900Data as [string, string][]);
+const pass2Words = toWords(pass2Data as [string, string][]);
+const passPre1Words = toWords(passPre1Data as [string, string][]);
+
 export const WORDBOOKS: Wordbook[] = [
   {
     id: "target1900",
@@ -41,15 +41,15 @@ export const WORDBOOKS: Wordbook[] = [
     id: "pass2",
     label: "でる順パス単 英検2級 5訂版",
     shortLabel: "でる順パス単 2級",
-    available: false,
-    words: [],
+    available: true,
+    words: pass2Words,
   },
   {
-    id: "passPre2",
-    label: "でる順パス単 英検準2級 5訂版",
-    shortLabel: "でる順パス単 準2級",
-    available: false,
-    words: [],
+    id: "passPre1",
+    label: "でる順パス単 英検準1級 5訂版",
+    shortLabel: "でる順パス単 準1級",
+    available: true,
+    words: passPre1Words,
   },
 ];
 
