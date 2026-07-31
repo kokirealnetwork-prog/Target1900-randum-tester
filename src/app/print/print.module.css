@@ -4,6 +4,18 @@
   padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px));
 }
 
+.page::before {
+  position: fixed;
+  z-index: 31;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: env(safe-area-inset-top, 0px);
+  background: #fafafb;
+  content: "";
+  pointer-events: none;
+}
+
 .shell {
   max-width: 520px;
   margin: 0 auto;
@@ -13,6 +25,7 @@
   position: sticky;
   z-index: 30;
   top: 0;
+  isolation: isolate;
   padding: max(14px, env(safe-area-inset-top, 0px)) 16px 22px;
   border-radius: 0 0 var(--radius-card) var(--radius-card);
   background: #fafafb;
