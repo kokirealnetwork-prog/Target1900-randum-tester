@@ -21,7 +21,7 @@ export const QUESTIONS_PER_PAGE_OPTIONS: QuestionsPerPage[] = [25, 50];
 export const DEFAULT_CONFIG: QuizConfig = {
   from: 1,
   to: 300,
-  count: 20,
+  count: 50,
   questionsPerPage: 50,
   mode: "en-ja",
   seed: 1,

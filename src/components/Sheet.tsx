@@ -44,15 +44,6 @@ export function Sheet({ sheet, config }: { sheet: SheetSpec; config: QuizConfig 
       }`}
     >
       <div className={styles.header}>
-        <div className={styles.legend}>
-          <span className={`${styles.legendItem} ${showAnswers ? "" : styles.legendItemActive}`}>
-            問題
-          </span>
-          <span className={`${styles.legendItem} ${showAnswers ? styles.legendItemActive : ""}`}>
-            答え
-          </span>
-        </div>
-
         <div className={styles.title}>
           <span className={styles.range}>{rangeLabel(config)}</span>
           <span className={styles.count}>
@@ -61,11 +52,18 @@ export function Sheet({ sheet, config }: { sheet: SheetSpec; config: QuizConfig 
           </span>
         </div>
 
+        <div className={`${styles.brand} brand-font`}>
+          Target 1900
+          <br />
+          randum tester
+        </div>
+
+        <div className={`${styles.legend} ${showAnswers ? styles.legendAnswer : ""}`}>
+          {showAnswers ? "答え" : "問題"}
+        </div>
+
         <div className={styles.pageNo}>
-          <span className={styles.pageNoMain}>
-            <span className={styles.pageNoValue}>{sheet.setIndex + 1}</span>
-            <span className={styles.pageNoUnit}>枚目</span>
-          </span>
+          <span className={styles.pageNoValue}>{sheet.setIndex + 1}</span>
           <span className={styles.pageNoTotal}>/ {sheet.setTotal}</span>
         </div>
       </div>
@@ -102,8 +100,6 @@ export function Sheet({ sheet, config }: { sheet: SheetSpec; config: QuizConfig 
           </div>
         ))}
       </div>
-
-      <div className={`${styles.footer} brand-font`}>Target 1900 randum tester</div>
     </div>
   );
 }
