@@ -88,27 +88,27 @@
   position: absolute;
   z-index: 60;
   top: 0;
-  right: 0;
-  left: 0;
-  padding: 12px 28px;
-  border: 1px solid #1f1f22;
-  border-radius: 32px;
+  right: 22px;
+  left: 22px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 26px;
   background: #ffffff;
-  box-shadow: 0 2px 8px rgba(30, 30, 45, 0.06);
+  box-shadow: 0 2px 10px rgba(30, 30, 45, 0.08);
 }
 
 .bookMenuOption {
   width: 100%;
-  min-height: 84px;
+  min-height: 68px;
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  padding: 0 38px;
+  padding: 0 18px;
   border: none;
   background: transparent;
   color: #48484f;
   font-family: var(--font-numeric), "Gen Interface JP", sans-serif;
-  font-size: clamp(19px, 5.6vw, 22px);
+  font-size: clamp(18px, 5vw, 20px);
   font-weight: 600;
   text-align: left;
 }
