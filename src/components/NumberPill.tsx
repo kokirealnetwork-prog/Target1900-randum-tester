@@ -12,8 +12,9 @@ type NumberPillProps = {
 };
 
 /**
- * Blue pill that behaves like a number field: free typing while focused, and a
- * clamped commit on blur so the value can never leave [min, max].
+ * Blue pill number field. Keeps free typing in local state while focused, and
+ * only clamps + commits on blur / Enter — otherwise typing "1000" would commit
+ * "1" midway and flip the range to 1–1.
  */
 export function NumberPill({ value, min, max, onChange, label }: NumberPillProps) {
   const [text, setText] = useState(String(value));
@@ -27,26 +28,26 @@ export function NumberPill({ value, min, max, onChange, label }: NumberPillProps
     const parsed = Number.parseInt(raw, 10);
     const next = Number.isFinite(parsed) ? Math.min(max, Math.max(min, parsed)) : value;
     setText(String(next));
-    onChange(next);
+    if (next !== value) onChange(next);
   };
 
   return (
     <input
       className={styles.pill}
-      type="number"
+      type="text"
       inputMode="numeric"
+      pattern="[0-9]*"
+      autoComplete="off"
       aria-label={label}
       value={text}
-      min={min}
-      max={max}
       onFocus={(event) => {
         focused.current = true;
         event.currentTarget.select();
       }}
       onChange={(event) => {
-        setText(event.target.value);
-        const parsed = Number.parseInt(event.target.value, 10);
-        if (Number.isFinite(parsed) && parsed >= min && parsed <= max) onChange(parsed);
+        // Digits only; empty is allowed while typing so the field can be cleared.
+        const next = event.target.value.replace(/\D/g, "");
+        setText(next);
       }}
       onBlur={(event) => {
         focused.current = false;
