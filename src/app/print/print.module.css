@@ -36,15 +36,16 @@
 
 .topBar {
   display: grid;
-  grid-template-columns: 40px 1fr 40px;
+  grid-template-columns: 40px minmax(0, 1fr);
   align-items: center;
+  column-gap: 20px;
   min-height: 50px;
 }
 
 .backButton {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -58,19 +59,33 @@
 
 .title {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 14px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
   margin: 0;
   color: var(--text-strong);
-  font-size: 19px;
+  line-height: 1.15;
+  text-align: left;
+}
+
+.bookTitle {
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+
+.titleMeta {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  font-size: 15px;
   font-weight: 500;
   white-space: nowrap;
 }
 
 .titleMode {
   color: #4c4c53;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 600;
 }
 
@@ -395,28 +410,60 @@
 
 @media (max-width: 430px) {
   .panel {
-    padding: max(14px, env(safe-area-inset-top, 0px)) 16px 22px;
+    padding:
+      max(79px, calc(env(safe-area-inset-top, 0px) + 51px))
+      40px
+      22px;
+  }
+
+  .backButton svg {
+    transform: translateX(-8px);
+  }
+
+  .topBar {
+    grid-template-columns: 40px minmax(0, 1fr);
+    column-gap: 20px;
+  }
+
+  .bookTitle {
+    font-size: 20px;
   }
 
   .controlRow {
-    grid-template-columns: minmax(128px, 1fr) auto 38px;
-    gap: 6px;
+    grid-template-columns: minmax(0, 1fr) auto 32px;
+    gap: 5px;
   }
 
   .topBar + .controlRow {
-    margin-top: 14px;
+    margin-top: 32px;
   }
 
   .controlRow + .controlRow {
-    margin-top: 6px;
+    margin-top: 21px;
   }
 
   .countPill {
-    width: 104px;
+    width: 92px;
+  }
+
+  .countPill input {
+    height: 36px;
+    font-size: 19px;
+  }
+
+  .resetButton {
+    width: 32px;
+    height: 36px;
   }
 
   .pageSizeToggle {
-    width: 150px;
+    width: 128px;
+    height: 36px;
+  }
+
+  .summary {
+    padding-right: 0;
+    padding-left: 0;
   }
 
   .sets {

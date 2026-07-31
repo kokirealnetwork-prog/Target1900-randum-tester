@@ -24,7 +24,7 @@ import {
   type SheetKind,
 } from "@/lib/quiz";
 import { randomSeed } from "@/lib/random";
-import { countInRange } from "@/lib/words";
+import { countInRange, getWordbook } from "@/lib/words";
 import styles from "./print.module.css";
 
 const KIND_LABELS: { kind: SheetKind; label: string }[] = [
@@ -49,6 +49,7 @@ export function PrintClient({ config }: { config: QuizConfig }) {
   const [previewKind, setPreviewKind] = useState<SheetKind>("question");
   const [preparingPdf, setPreparingPdf] = useState(false);
   const total = setCount(currentConfig);
+  const wordbook = getWordbook(currentConfig.wordbook);
   const available = countInRange(
     currentConfig.wordbook,
     currentConfig.from,
@@ -181,10 +182,12 @@ export function PrintClient({ config }: { config: QuizConfig }) {
                 <ChevronLeftIcon />
               </Link>
               <h1 className={styles.title}>
-                <span className={styles.titleRange}>{rangeLabel(currentConfig)}</span>
-                <span className={styles.titleMode}>{modeLabel(currentConfig.mode)}</span>
+                <span className={styles.bookTitle}>{wordbook.label}</span>
+                <span className={styles.titleMeta}>
+                  <span className={styles.titleRange}>{rangeLabel(currentConfig)}</span>
+                  <span className={styles.titleMode}>{modeLabel(currentConfig.mode)}</span>
+                </span>
               </h1>
-              <span />
             </div>
 
             <div className={styles.controlRow}>
