@@ -49,7 +49,11 @@ export function PrintClient({ config }: { config: QuizConfig }) {
   const [previewKind, setPreviewKind] = useState<SheetKind>("question");
   const [preparingPdf, setPreparingPdf] = useState(false);
   const total = setCount(currentConfig);
-  const available = countInRange(currentConfig.from, currentConfig.to);
+  const available = countInRange(
+    currentConfig.wordbook,
+    currentConfig.from,
+    currentConfig.to,
+  );
 
   const orderedKinds = useMemo(
     () => KIND_LABELS.map((entry) => entry.kind).filter((kind) => activeKinds.includes(kind)),

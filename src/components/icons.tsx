@@ -52,6 +52,14 @@ export function ChevronLeftIcon({ className }: IconProps) {
   );
 }
 
+export function UpDownChevronsIcon({ className }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" {...base}>
+      <path d="m8 9 4-4 4 4M16 15l-4 4-4-4" />
+    </svg>
+  );
+}
+
 export function ResetIcon({ className }: IconProps) {
   return (
     <svg className={className} viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" {...base}>

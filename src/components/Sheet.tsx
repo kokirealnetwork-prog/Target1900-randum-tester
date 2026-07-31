@@ -56,7 +56,7 @@ export function Sheet({ sheet, config }: { sheet: SheetSpec; config: QuizConfig 
         <div className={styles.brand}>
           <Image
             src="/brand-yikes-stacked.svg"
-            alt="Target 1900 randum tester"
+            alt="tango randum tester"
             width={85}
             height={26}
           />

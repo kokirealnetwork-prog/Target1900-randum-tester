@@ -1,16 +1,3 @@
-/* The visible brand is an outlined Yikes SVG; this remains as a fallback for
-   any future live-text use of the brand face. */
-@font-face {
-  font-family: "Yikes";
-  src:
-    url("/fonts/Yikes.woff2") format("woff2"),
-    url("/fonts/Yikes.otf") format("opentype"),
-    url("/fonts/Yikes.ttf") format("truetype");
-  font-weight: 100 900;
-  font-style: normal;
-  font-display: swap;
-}
-
 :root {
   --blue: #4d7cfd;
   --blue-dark: #3d6cf0;
@@ -51,10 +38,6 @@ body {
   font-family: "Gen Interface JP", system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -webkit-text-size-adjust: 100%;
-}
-
-.brand-font {
-  font-family: "Yikes", "Gen Interface JP", sans-serif;
 }
 
 button,

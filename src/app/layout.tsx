@@ -11,8 +11,8 @@ const googleSansFlex = Google_Sans_Flex({
 });
 
 export const metadata: Metadata = {
-  title: "target1900tester-ver6",
-  description: "ターゲット1900の単語からランダムに単語テストを作って印刷できます。",
+  title: "tango randum tester",
+  description: "単語帳からランダムに単語テストを作ってPDFで印刷できます。",
 };
 
 export const viewport: Viewport = {

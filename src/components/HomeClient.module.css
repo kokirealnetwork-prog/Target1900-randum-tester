@@ -35,7 +35,7 @@
 }
 
 .brand {
-  margin: 0 0 22px;
+  margin: 0 0 18px;
 }
 
 .brand img {
@@ -43,6 +43,91 @@
   width: min(100%, 260px);
   height: auto;
   margin: 0 auto;
+}
+
+.bookPicker {
+  position: relative;
+  width: 100%;
+  max-width: 396px;
+  margin: 0 auto 24px;
+}
+
+.bookPickerButton {
+  width: 100%;
+  min-height: 44px;
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr) 28px;
+  align-items: center;
+  gap: 8px;
+  padding: 0 8px;
+  border: none;
+  background: transparent;
+  color: var(--blue);
+  font-size: 18px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.bookPickerButton::after {
+  width: 28px;
+  content: "";
+}
+
+.bookPickerButton svg {
+  width: 22px;
+  height: 22px;
+  color: #a8a8b0;
+}
+
+.bookPickerButton:active {
+  opacity: 0.7;
+}
+
+.bookMenu {
+  position: absolute;
+  z-index: 60;
+  top: calc(100% + 6px);
+  right: 0;
+  left: 0;
+  padding: 6px;
+  border: 1px solid #e7e7ea;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.98);
+  box-shadow: 0 8px 24px rgba(30, 30, 45, 0.12);
+}
+
+.bookMenuOption {
+  width: 100%;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 11px;
+  background: transparent;
+  color: #48484f;
+  font-size: 14px;
+  text-align: left;
+}
+
+.bookMenuOptionActive {
+  background: var(--blue-soft);
+  color: var(--blue);
+  font-weight: 600;
+}
+
+.bookMenuOption:disabled {
+  color: #a8a8b0;
+  cursor: default;
+}
+
+.bookMenuOption small {
+  flex: none;
+  color: #b2b2b8;
+  font-size: 11px;
+  font-weight: 500;
 }
 
 .fieldLabel {

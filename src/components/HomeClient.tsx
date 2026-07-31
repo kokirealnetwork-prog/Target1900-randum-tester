@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { NumberPill } from "@/components/NumberPill";
-import { DocumentIcon } from "@/components/icons";
+import { DocumentIcon, UpDownChevronsIcon } from "@/components/icons";
 import {
   encodeConfig,
   normalizeConfig,
@@ -12,7 +12,14 @@ import {
   type QuizConfig,
   type QuizMode,
 } from "@/lib/quiz";
-import { FIRST_ID, LAST_ID, wordsInRange } from "@/lib/words";
+import {
+  WORDBOOKS,
+  firstIdFor,
+  getWordbook,
+  lastIdFor,
+  wordsInRange,
+  type WordbookId,
+} from "@/lib/words";
 import styles from "./HomeClient.module.css";
 
 const MODE_OPTIONS: { mode: QuizMode; label: string }[] = [
@@ -27,10 +34,29 @@ export function HomeClient({ initialConfig }: { initialConfig: QuizConfig }) {
    */
   const [draft, setDraft] = useState<QuizConfig>(initialConfig);
   const config = useMemo(() => normalizeConfig(draft), [draft]);
+  const [bookMenuOpen, setBookMenuOpen] = useState(false);
+  const book = getWordbook(config.wordbook);
+  const firstId = firstIdFor();
+  const lastId = lastIdFor(config.wordbook);
 
   // The list is the plain word list for the chosen range, in book order.
-  const words = useMemo(() => wordsInRange(config.from, config.to), [config.from, config.to]);
+  const words = useMemo(
+    () => wordsInRange(config.wordbook, config.from, config.to),
+    [config.wordbook, config.from, config.to],
+  );
   const update = (patch: Partial<QuizConfig>) => setDraft((current) => ({ ...current, ...patch }));
+  const selectWordbook = (wordbook: WordbookId) => {
+    const selected = getWordbook(wordbook);
+    if (!selected.available) return;
+    const selectedLastId = lastIdFor(wordbook);
+    update({
+      wordbook,
+      from: firstIdFor(),
+      to: Math.min(300, selectedLastId),
+      count: Math.min(50, selectedLastId),
+    });
+    setBookMenuOpen(false);
+  };
   const selectMode = (mode: QuizMode) => {
     const activeElement = document.activeElement;
     if (activeElement instanceof HTMLInputElement) activeElement.blur();
@@ -44,12 +70,45 @@ export function HomeClient({ initialConfig }: { initialConfig: QuizConfig }) {
           <h1 className={styles.brand}>
             <Image
               src="/brand-yikes.svg"
-              alt="Target 1900 randum tester"
+              alt="tango randum tester"
               width={260}
               height={23}
               priority
             />
           </h1>
+
+          <div className={styles.bookPicker}>
+            <button
+              type="button"
+              className={styles.bookPickerButton}
+              aria-haspopup="listbox"
+              aria-expanded={bookMenuOpen}
+              onClick={() => setBookMenuOpen((open) => !open)}
+            >
+              <UpDownChevronsIcon />
+              <span>{book.label}</span>
+            </button>
+            {bookMenuOpen ? (
+              <div className={styles.bookMenu} role="listbox" aria-label="単語帳を選択">
+                {WORDBOOKS.map((option) => (
+                  <button
+                    key={option.id}
+                    type="button"
+                    role="option"
+                    aria-selected={config.wordbook === option.id}
+                    disabled={!option.available}
+                    className={`${styles.bookMenuOption} ${
+                      config.wordbook === option.id ? styles.bookMenuOptionActive : ""
+                    }`}
+                    onClick={() => selectWordbook(option.id)}
+                  >
+                    <span>{option.label}</span>
+                    {!option.available ? <small>データ待ち</small> : null}
+                  </button>
+                ))}
+              </div>
+            ) : null}
+          </div>
 
           <div className={styles.field}>
             <span className={styles.fieldLabel}>範囲</span>
@@ -57,8 +116,8 @@ export function HomeClient({ initialConfig }: { initialConfig: QuizConfig }) {
               <NumberPill
                 label="範囲の始め"
                 value={config.from}
-                min={FIRST_ID}
-                max={LAST_ID}
+                min={firstId}
+                max={lastId}
                 onChange={(from) => update({ from })}
               />
               <span className={styles.connector} aria-hidden="true">
@@ -67,8 +126,8 @@ export function HomeClient({ initialConfig }: { initialConfig: QuizConfig }) {
               <NumberPill
                 label="範囲の終わり"
                 value={config.to}
-                min={FIRST_ID}
-                max={LAST_ID}
+                min={firstId}
+                max={lastId}
                 onChange={(to) => update({ to })}
               />
             </div>

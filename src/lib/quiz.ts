@@ -1,11 +1,21 @@
 import { mulberry32, sample } from "./random";
-import { FIRST_ID, LAST_ID, countInRange, wordsInRange, type Word } from "./words";
+import {
+  DEFAULT_WORDBOOK_ID,
+  availableWordbook,
+  countInRange,
+  firstIdFor,
+  lastIdFor,
+  wordsInRange,
+  type Word,
+  type WordbookId,
+} from "./words";
 
 /** `en-ja` shows the English word and asks for the meaning (Aあ). */
 export type QuizMode = "en-ja" | "ja-en";
 export type QuestionsPerPage = 25 | 50;
 
 export type QuizConfig = {
+  wordbook: WordbookId;
   from: number;
   to: number;
   /** Total questions across every 組. */
@@ -19,6 +29,7 @@ export const COLUMNS_PER_PAGE = 2;
 export const QUESTIONS_PER_PAGE_OPTIONS: QuestionsPerPage[] = [25, 50];
 
 export const DEFAULT_CONFIG: QuizConfig = {
+  wordbook: DEFAULT_WORDBOOK_ID,
   from: 1,
   to: 300,
   count: 50,
@@ -30,12 +41,16 @@ export const DEFAULT_CONFIG: QuizConfig = {
 const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
 
 export function normalizeConfig(input: Partial<QuizConfig>): QuizConfig {
-  const from = clamp(Math.round(input.from ?? DEFAULT_CONFIG.from), FIRST_ID, LAST_ID);
-  const to = clamp(Math.round(input.to ?? DEFAULT_CONFIG.to), FIRST_ID, LAST_ID);
+  const book = availableWordbook(input.wordbook);
+  const firstId = firstIdFor();
+  const lastId = lastIdFor(book.id);
+  const from = clamp(Math.round(input.from ?? DEFAULT_CONFIG.from), firstId, lastId);
+  const to = clamp(Math.round(input.to ?? DEFAULT_CONFIG.to), firstId, lastId);
   const low = Math.min(from, to);
   const high = Math.max(from, to);
-  const available = countInRange(low, high);
+  const available = countInRange(book.id, low, high);
   return {
+    wordbook: book.id,
     from: low,
     to: high,
     // 問題数 is the whole draw, so the range itself is the only ceiling.
@@ -48,6 +63,7 @@ export function normalizeConfig(input: Partial<QuizConfig>): QuizConfig {
 
 export function encodeConfig(config: QuizConfig): string {
   return new URLSearchParams({
+    book: config.wordbook,
     from: String(config.from),
     to: String(config.to),
     count: String(config.count),
@@ -65,6 +81,7 @@ export function decodeConfig(params: URLSearchParams | null): QuizConfig {
     return Number.isFinite(parsed) ? parsed : undefined;
   };
   return normalizeConfig({
+    wordbook: availableWordbook(params?.get("book")).id,
     from: num("from"),
     to: num("to"),
     count: num("count"),
@@ -103,7 +120,7 @@ export function setCount(config: QuizConfig): number {
 
 /** Draws every question at once, then cuts the list into one 組 per sheet. */
 export function buildSets(config: QuizConfig): QuizSet[] {
-  const pool = wordsInRange(config.from, config.to);
+  const pool = wordsInRange(config.wordbook, config.from, config.to);
   const rng = mulberry32(config.seed);
   const picked = sample(pool, config.count, rng);
   return Array.from({ length: setCount(config) }, (_, index) => ({
