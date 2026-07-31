@@ -50,6 +50,8 @@
   width: 100%;
   max-width: 396px;
   margin: 0 auto 24px;
+  /* Nudge the native menu anchor slightly left of dead center. */
+  transform: translateX(-6px);
 }
 
 .bookPicker svg {
