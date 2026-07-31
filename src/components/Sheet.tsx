@@ -20,8 +20,14 @@ function fitFontSize(text: string): string {
   return "6.5pt";
 }
 
-function columnsOf(questions: QuizQuestion[]): QuizQuestion[][] {
-  const perColumn = Math.max(1, Math.ceil(questions.length / COLUMNS_PER_PAGE));
+function columnsOf(
+  questions: QuizQuestion[],
+  questionsPerPage: QuizConfig["questionsPerPage"],
+): QuizQuestion[][] {
+  // Keep the column boundary tied to the selected paper layout, not to the
+  // number of questions left on the final sheet. This makes a partial sheet
+  // use the same row size and alignment as a full one.
+  const perColumn = Math.ceil(questionsPerPage / COLUMNS_PER_PAGE);
   return Array.from({ length: COLUMNS_PER_PAGE }, (_, i) =>
     questions.slice(i * perColumn, (i + 1) * perColumn),
   );
@@ -29,7 +35,7 @@ function columnsOf(questions: QuizQuestion[]): QuizQuestion[][] {
 
 export function Sheet({ sheet, config }: { sheet: SheetSpec; config: QuizConfig }) {
   const showAnswers = sheet.kind === "answer";
-  const columns = columnsOf(sheet.questions);
+  const columns = columnsOf(sheet.questions, config.questionsPerPage);
 
   return (
     <div
@@ -71,13 +77,14 @@ export function Sheet({ sheet, config }: { sheet: SheetSpec; config: QuizConfig 
               <div className={styles.row} key={question.no}>
                 <span className={styles.rowNo}>{question.no}</span>
                 <div className={styles.box}>
-                  <div className={styles.cell}>
+                  <div className={`${styles.cell} ${styles.cellPrompt}`}>
                     <span
                       className={styles.cellText}
                       style={{ fontSize: fitFontSize(question.prompt) }}
                     >
                       {question.prompt}
                     </span>
+                    <span className={styles.wordId}>{question.word.id}</span>
                   </div>
                   <div className={`${styles.cell} ${styles.cellAnswer}`}>
                     {showAnswers ? (

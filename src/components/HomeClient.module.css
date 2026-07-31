@@ -1,6 +1,6 @@
 .page {
   min-height: 100dvh;
-  padding-bottom: 138px;
+  padding-bottom: 120px;
 }
 
 .shell {
@@ -16,12 +16,12 @@
   backdrop-filter: blur(20px) saturate(150%);
   -webkit-backdrop-filter: blur(20px) saturate(150%);
   border-radius: 0 0 var(--radius-card) var(--radius-card);
-  padding: 78px 38px 38px;
+  padding: 26px 20px;
   box-shadow: 0 2px 7px rgba(30, 30, 45, 0.1);
 }
 
 .brand {
-  margin: 0 0 38px;
+  margin: 0 0 22px;
   text-align: center;
   font-size: 15px;
   font-weight: 500;
@@ -31,9 +31,9 @@
 
 .fieldLabel {
   display: block;
-  margin-bottom: 18px;
+  margin-bottom: 8px;
   text-align: center;
-  font-size: 17px;
+  font-size: 13px;
   font-weight: 500;
   color: #57575e;
 }
@@ -41,7 +41,7 @@
 .rangeRow {
   display: flex;
   align-items: center;
-  gap: 18px;
+  gap: 10px;
 }
 
 .rangeRow > * {
@@ -50,7 +50,7 @@
 }
 
 .connector {
-  flex: 0 0 66px;
+  flex: 0 0 44px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -87,12 +87,12 @@
 }
 
 .modeField {
-  margin-top: 44px;
+  margin-top: 18px;
 }
 
 .toggle {
   display: flex;
-  height: 48px;
+  height: 44px;
   padding: 0;
   border-radius: var(--radius-pill);
   background: #c9c9cc;
@@ -119,27 +119,27 @@
 .list {
   list-style: none;
   margin: 0;
-  padding: 18px 20px 0;
+  padding: 14px 14px 0;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 8px;
 }
 
 .row {
   display: grid;
-  grid-template-columns: 64px 1fr 1.25fr;
+  grid-template-columns: 34px 1fr 1fr;
   align-items: center;
-  min-height: 84px;
-  padding: 10px 14px;
+  min-height: 54px;
+  padding: 8px 6px;
   border: 1px solid #e8e8eb;
-  border-radius: 18px;
+  border-radius: 16px;
   background: #fff;
   box-shadow: 0 1px 4px rgba(30, 30, 45, 0.05);
 }
 
 .rowNo {
   text-align: center;
-  font-size: 16px;
+  font-size: 12px;
   color: var(--muted);
 }
 
@@ -147,7 +147,7 @@
 .rowAnswer {
   min-width: 0;
   text-align: center;
-  font-size: 18px;
+  font-size: 14px;
   line-height: 1.35;
   overflow: hidden;
   overflow-wrap: anywhere;
@@ -171,7 +171,7 @@
   bottom: 0;
   display: flex;
   justify-content: center;
-  padding: 18px 48px 22px;
+  padding: 18px 16px 22px;
   background: linear-gradient(to top, var(--bg) 58%, rgba(244, 244, 246, 0));
   pointer-events: none;
   z-index: 40;
@@ -180,8 +180,8 @@
 .primaryButton {
   pointer-events: auto;
   width: 100%;
-  max-width: 434px;
-  height: 112px;
+  max-width: 420px;
+  height: 62px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -190,7 +190,7 @@
   border-radius: var(--radius-pill);
   background: var(--blue);
   color: #fff;
-  font-size: 30px;
+  font-size: 19px;
   font-weight: 600;
   letter-spacing: 0.04em;
   box-shadow: var(--shadow-float);
@@ -204,24 +204,19 @@
 }
 
 .primaryButton svg {
-  width: 34px;
-  height: 34px;
+  width: 24px;
+  height: 24px;
 }
 
 @media (max-width: 420px) {
   .panel {
-    padding-right: 28px;
-    padding-left: 28px;
+    padding-right: 20px;
+    padding-left: 20px;
   }
 
   .floatingBar {
-    padding-right: 28px;
-    padding-left: 28px;
-  }
-
-  .primaryButton {
-    height: 88px;
-    font-size: 25px;
+    padding-right: 16px;
+    padding-left: 16px;
   }
 
   .toggleOption {

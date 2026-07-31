@@ -116,9 +116,8 @@
 }
 
 .row {
-  flex: 1 1 0;
-  min-height: 9mm;
-  max-height: 22mm;
+  flex: none;
+  height: 15mm;
   display: flex;
   align-items: center;
   gap: 2.5mm;
@@ -145,6 +144,7 @@
 
 .cell {
   flex: 1 1 50%;
+  position: relative;
   min-width: 0;
   display: flex;
   align-items: center;
@@ -158,6 +158,10 @@
   border-left: 0.3mm solid var(--sheet-line);
 }
 
+.cellPrompt {
+  padding-right: 5mm;
+}
+
 .cellText {
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -166,13 +170,21 @@
   overflow: hidden;
 }
 
+.wordId {
+  position: absolute;
+  right: 1.2mm;
+  bottom: 0.7mm;
+  color: #a8a8b0;
+  font-size: 5.5pt;
+  line-height: 1;
+}
+
 .sheetDense .column {
   gap: 1.1mm;
 }
 
 .sheetDense .row {
-  min-height: 0;
-  max-height: none;
+  height: 8.6mm;
   gap: 1.5mm;
 }
 
@@ -187,6 +199,10 @@
 
 .sheetDense .cell {
   padding: 0 1.4mm;
+}
+
+.sheetDense .cellPrompt {
+  padding-right: 4.5mm;
 }
 
 .footer {
