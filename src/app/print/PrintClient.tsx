@@ -103,7 +103,7 @@ export function PrintClient({ config }: { config: QuizConfig }) {
       return;
     }
 
-    pdfWindow.document.title = "PDFを作成中";
+    pdfWindow.document.title = "PDF作成中…";
     pdfWindow.document.body.innerHTML =
       '<p style="font-family:system-ui,sans-serif;padding:24px">印刷用PDFを作成しています…</p>';
 

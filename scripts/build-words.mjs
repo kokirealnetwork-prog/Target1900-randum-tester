@@ -24,7 +24,11 @@ const rows = XLSX.utils.sheet_to_json(sheet, { header: 1, raw: true });
  */
 const toText = (value) => {
   if (typeof value === "boolean") return value ? "true" : "false";
-  return String(value ?? "").trim();
+  // Excel sometimes inserts NBSP (U+A0) inside compounds such as「必需食品」.
+  return String(value ?? "")
+    .replace(/\u00a0/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
 };
 
 const NESTED = "(?:[^（）]|（[^（）]*）)*";

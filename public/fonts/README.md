@@ -1,17 +1,17 @@
 # フォント置き場
 
-「Target 1900 randum tester」のロゴには **Yikes**（YOMAGICK 作のラウンドサンセリフ）を使います。
-ライセンス上リポジトリには同梱していないので、下記から入手してこのフォルダに置いてください。
+ロゴ「tango random tester」には **Yikes**（YOMAGICK 作のラウンドサンセリフ）を使っています。
+配布物のライセンス上、リポジトリにはフォントファイルを同梱していません。アプリ上のロゴは
+パス化した SVG（`public/brand-yikes.svg` / `brand-yikes-stacked.svg`）を表示しています。
+
+フォント本体が必要な場合（ロゴ再生成など）:
 
 - 配布元: https://2938369882508.gumroad.com/l/yikesyomagick
 
-置くファイル名（どれか 1 つでOK。上から優先して読み込みます）:
+置くファイル名の例:
 
 ```
 public/fonts/Yikes.woff2
 public/fonts/Yikes.otf
 public/fonts/Yikes.ttf
 ```
-
-woff2 に変換しておくといちばん軽くなります。ファイルが無い場合は Noto Sans で表示されます。
-`@font-face` の定義は `src/app/globals.css` にあります。

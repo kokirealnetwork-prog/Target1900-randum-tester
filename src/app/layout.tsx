@@ -11,7 +11,7 @@ const googleSansFlex = Google_Sans_Flex({
 });
 
 export const metadata: Metadata = {
-  title: "tango randum tester",
+  title: "tango random tester",
   description: "単語帳からランダムに単語テストを作ってPDFで印刷できます。",
 };
 

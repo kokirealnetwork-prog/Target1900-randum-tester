@@ -32,21 +32,21 @@ const passPre1Words = toWords(passPre1Data as [string, string][]);
 export const WORDBOOKS: Wordbook[] = [
   {
     id: "target1900",
-    label: "ターゲット1900 6訂版",
+    label: "英単語ターゲット1900 6訂版",
     shortLabel: "ターゲット1900",
     available: true,
     words: target1900Words,
   },
   {
     id: "pass2",
-    label: "でる順パス単 英検2級 5訂版",
+    label: "英検2級 でる順パス単 5訂版",
     shortLabel: "でる順パス単 2級",
     available: true,
     words: pass2Words,
   },
   {
     id: "passPre1",
-    label: "でる順パス単 英検準1級 5訂版",
+    label: "英検準1級 でる順パス単 5訂版",
     shortLabel: "でる順パス単 準1級",
     available: true,
     words: passPre1Words,
