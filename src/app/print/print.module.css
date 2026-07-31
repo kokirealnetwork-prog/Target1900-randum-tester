@@ -71,7 +71,7 @@
 .bookTitle {
   font-size: 20px;
   font-weight: 600;
-  letter-spacing: -0.015em;
+  letter-spacing: -0.02em;
 }
 
 .titleMeta {
@@ -428,7 +428,8 @@
   }
 
   .bookTitle {
-    font-size: 20px;
+    font-size: 17px;
+    letter-spacing: -0.025em;
   }
 
   .controlRow {
