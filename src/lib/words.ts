@@ -12,7 +12,6 @@ export type Wordbook = {
   id: WordbookId;
   label: string;
   shortLabel: string;
-  expectedWordCount: number;
   available: boolean;
   words: Word[];
 };
@@ -35,7 +34,6 @@ export const WORDBOOKS: Wordbook[] = [
     id: "target1900",
     label: "ターゲット1900 6訂版",
     shortLabel: "ターゲット1900",
-    expectedWordCount: target1900Words.length,
     available: true,
     words: target1900Words,
   },
@@ -43,7 +41,6 @@ export const WORDBOOKS: Wordbook[] = [
     id: "pass2",
     label: "でる順パス単 英検2級 5訂版",
     shortLabel: "でる順パス単 2級",
-    expectedWordCount: 1300,
     available: false,
     words: [],
   },
@@ -51,7 +48,6 @@ export const WORDBOOKS: Wordbook[] = [
     id: "passPre2",
     label: "でる順パス単 英検準2級 5訂版",
     shortLabel: "でる順パス単 準2級",
-    expectedWordCount: 1100,
     available: false,
     words: [],
   },
