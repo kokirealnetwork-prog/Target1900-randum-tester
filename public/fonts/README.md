@@ -1,6 +1,6 @@
 # フォント置き場
 
-「Target 1900 randum tester」のロゴには **Yikes**（YOMAGICK 作のラウンドサンセリフ）を使います。
+「Target 1900 random tester」のロゴには **Yikes**（YOMAGICK 作のラウンドサンセリフ）を使います。
 ライセンス上リポジトリには同梱していないので、下記から入手してこのフォルダに置いてください。
 
 - 配布元: https://2938369882508.gumroad.com/l/yikesyomagick

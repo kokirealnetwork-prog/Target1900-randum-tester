@@ -72,7 +72,7 @@ export function HomeClient({ initialConfig }: { initialConfig: QuizConfig }) {
           <h1 className={styles.brand}>
             <Image
               src="/brand-yikes.svg"
-              alt="tango randum tester"
+              alt="tango random tester"
               width={260}
               height={23}
               priority
