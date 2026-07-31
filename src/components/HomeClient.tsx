@@ -72,7 +72,7 @@ export function HomeClient({ initialConfig }: { initialConfig: QuizConfig }) {
               src="/brand-yikes.svg"
               alt="tango randum tester"
               width={260}
-              height={31}
+              height={23}
               priority
             />
           </h1>
