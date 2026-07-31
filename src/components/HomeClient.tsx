@@ -31,6 +31,11 @@ export function HomeClient({ initialConfig }: { initialConfig: QuizConfig }) {
   // The list is the plain word list for the chosen range, in book order.
   const words = useMemo(() => wordsInRange(config.from, config.to), [config.from, config.to]);
   const update = (patch: Partial<QuizConfig>) => setDraft((current) => ({ ...current, ...patch }));
+  const selectMode = (mode: QuizMode) => {
+    const activeElement = document.activeElement;
+    if (activeElement instanceof HTMLInputElement) activeElement.blur();
+    update({ mode });
+  };
 
   return (
     <main className={`${styles.page} screen-only`}>
@@ -85,7 +90,10 @@ export function HomeClient({ initialConfig }: { initialConfig: QuizConfig }) {
                     config.mode === option.mode ? styles.toggleOptionActive : ""
                   }`}
                   aria-pressed={config.mode === option.mode}
-                  onClick={() => update({ mode: option.mode })}
+                  onPointerDown={(event) => {
+                    if (event.pointerType !== "mouse") selectMode(option.mode);
+                  }}
+                  onClick={() => selectMode(option.mode)}
                 >
                   {option.label}
                 </button>

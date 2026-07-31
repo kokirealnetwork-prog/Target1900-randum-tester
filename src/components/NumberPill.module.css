@@ -17,7 +17,7 @@
   letter-spacing: 0.02em;
   -moz-appearance: textfield;
   appearance: textfield;
-  transition: background 0.15s ease, transform 0.1s ease;
+  transition: background 0.12s ease;
 }
 
 .pill::-webkit-outer-spin-button,
@@ -29,10 +29,6 @@
 .pill:focus {
   outline: none;
   background: var(--blue-dark);
-}
-
-.pill:active {
-  transform: scale(0.98);
 }
 
 .pill:disabled {
