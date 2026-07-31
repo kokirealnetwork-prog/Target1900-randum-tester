@@ -50,8 +50,15 @@
   width: 100%;
   max-width: 396px;
   margin: 0 auto 24px;
+  border: 2px solid transparent;
+  border-radius: 999px;
   /* Nudge the native menu anchor slightly left of dead center. */
   transform: translateX(-6px);
+}
+
+.bookPicker:focus-within {
+  /* Paint on the wrapper — Safari washes the native <select> focus ring. */
+  border-color: var(--blue);
 }
 
 .bookPicker svg {
@@ -71,7 +78,7 @@
   width: 100%;
   min-height: 72px;
   padding: 0 44px 0 40px;
-  border: 2px solid transparent;
+  border: none;
   border-radius: 999px;
   background: #ffffff;
   box-shadow: 0 1px 7px rgba(30, 30, 45, 0.09);
@@ -94,11 +101,8 @@
 
 .bookSelect:focus,
 .bookSelect:focus-visible {
-  /* Safari ignores outline on <select>; paint an opaque ring with the app blue. */
   outline: none;
-  border-color: #4d7cfd;
   box-shadow: 0 1px 7px rgba(30, 30, 45, 0.09);
-  -webkit-focus-ring-color: #4d7cfd;
 }
 
 .fieldLabel {
