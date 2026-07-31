@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { MixedLabel } from "@/components/MixedLabel";
 import { NumberPill } from "@/components/NumberPill";
 import { DocumentIcon, UpDownChevronsIcon } from "@/components/icons";
@@ -28,14 +28,12 @@ const MODE_OPTIONS: { mode: QuizMode; label: string }[] = [
   { mode: "ja-en", label: "日本語からEN" },
 ];
 
-function reloadWithConfig(config: QuizConfig) {
-  window.location.replace(`/?${encodeConfig(config)}`);
-}
-
 export function HomeClient({ initialConfig }: { initialConfig: QuizConfig }) {
   /**
    * Kept unclamped on purpose: narrowing the range temporarily caps the question
    * count, and widening it again restores what the user actually asked for.
+   * Range bounds keep the typed order (300–1 stays 300–1 in the pills); the
+   * word list always walks min..max so it still shows 1→300.
    */
   const [draft, setDraft] = useState<QuizConfig>(initialConfig);
   const config = useMemo(() => normalizeConfig(draft), [draft]);
@@ -44,36 +42,20 @@ export function HomeClient({ initialConfig }: { initialConfig: QuizConfig }) {
   const firstId = firstIdFor();
   const lastId = lastIdFor(config.wordbook);
 
-  // The list is the plain word list for the chosen range, in book order.
+  // Book order between the two ends, regardless of which pill is larger.
   const words = useMemo(
     () => wordsInRange(config.wordbook, config.from, config.to),
     [config.wordbook, config.from, config.to],
   );
   const update = (patch: Partial<QuizConfig>) => setDraft((current) => ({ ...current, ...patch }));
 
-  // URL が from > to（例: 300–1）のときは 1–300 に直して再ロードする。
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const rawFrom = Number(params.get("from"));
-    const rawTo = Number(params.get("to"));
-    if (!Number.isFinite(rawFrom) || !Number.isFinite(rawTo) || rawFrom <= rawTo) return;
-    reloadWithConfig(initialConfig);
-  }, [initialConfig]);
-
-  /** 範囲を更新。逆転したら小さい方→大きい方に入れ替えて再ロードする。 */
-  const applyRange = (from: number, to: number) => {
-    if (from > to) {
-      reloadWithConfig(normalizeConfig({ ...draft, from, to }));
-      return;
-    }
-    update({ from, to });
-  };
-
   const selectWordbook = (wordbook: WordbookId) => {
     const selected = getWordbook(wordbook);
     if (!selected.available) return;
     const selectedLastId = lastIdFor(wordbook);
-    const rangeFitsSelectedBook = config.from >= firstIdFor() && config.to <= selectedLastId;
+    const low = Math.min(config.from, config.to);
+    const high = Math.max(config.from, config.to);
+    const rangeFitsSelectedBook = low >= firstIdFor() && high <= selectedLastId;
     update({
       wordbook,
       from: rangeFitsSelectedBook ? config.from : firstIdFor(),
@@ -143,11 +125,7 @@ export function HomeClient({ initialConfig }: { initialConfig: QuizConfig }) {
                 value={config.from}
                 min={firstId}
                 max={lastId}
-                onChange={(from) => {
-                  // Pin the other end to the on-screen value so draft cannot drift
-                  // away from what the pills show.
-                  applyRange(from, config.to);
-                }}
+                onChange={(from) => update({ from })}
               />
               <span className={styles.connector} aria-hidden="true">
                 <span className={styles.connectorLine} />
@@ -157,9 +135,7 @@ export function HomeClient({ initialConfig }: { initialConfig: QuizConfig }) {
                 value={config.to}
                 min={firstId}
                 max={lastId}
-                onChange={(to) => {
-                  applyRange(config.from, to);
-                }}
+                onChange={(to) => update({ to })}
               />
             </div>
           </div>

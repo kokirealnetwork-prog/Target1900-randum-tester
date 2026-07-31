@@ -44,15 +44,15 @@ export function normalizeConfig(input: Partial<QuizConfig>): QuizConfig {
   const book = availableWordbook(input.wordbook);
   const firstId = firstIdFor();
   const lastId = lastIdFor(book.id);
+  // Keep the typed order (e.g. 300–1). List/draw code already treats the span
+  // as min..max, so we must not swap the displayed bounds here.
   const from = clamp(Math.round(input.from ?? DEFAULT_CONFIG.from), firstId, lastId);
   const to = clamp(Math.round(input.to ?? DEFAULT_CONFIG.to), firstId, lastId);
-  const low = Math.min(from, to);
-  const high = Math.max(from, to);
-  const available = countInRange(book.id, low, high);
+  const available = countInRange(book.id, from, to);
   return {
     wordbook: book.id,
-    from: low,
-    to: high,
+    from,
+    to,
     // 問題数 is the whole draw, so the range itself is the only ceiling.
     count: clamp(Math.round(input.count ?? DEFAULT_CONFIG.count), 1, available),
     questionsPerPage: input.questionsPerPage === 25 ? 25 : 50,
@@ -173,7 +173,9 @@ export function sortForPrint(sheets: SheetSpec[]): SheetSpec[] {
 }
 
 export function rangeLabel(config: QuizConfig): string {
-  return `${config.from}-${config.to}`;
+  const low = Math.min(config.from, config.to);
+  const high = Math.max(config.from, config.to);
+  return `${low}-${high}`;
 }
 
 export function modeLabel(mode: QuizMode): string {
