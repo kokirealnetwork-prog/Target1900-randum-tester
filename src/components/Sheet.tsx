@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { MixedLabel } from "@/components/MixedLabel";
 import {
   COLUMNS_PER_PAGE,
   rangeLabel,
@@ -48,7 +49,7 @@ export function Sheet({ sheet, config }: { sheet: SheetSpec; config: QuizConfig 
     >
       <div className={styles.header}>
         <div className={styles.title}>
-          <span className={styles.bookName}>{wordbook.label}</span>
+          <span className={styles.bookName}><MixedLabel text={wordbook.label} /></span>
           <div className={styles.titleLine}>
             <span className={styles.range}>{rangeLabel(config)}</span>
             <span className={styles.count}>

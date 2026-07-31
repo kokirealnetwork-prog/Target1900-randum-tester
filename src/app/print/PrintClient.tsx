@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { NumberPill } from "@/components/NumberPill";
+import { MixedLabel } from "@/components/MixedLabel";
 import { Sheet } from "@/components/Sheet";
 import {
   CheckCircleIcon,
@@ -182,7 +183,7 @@ export function PrintClient({ config }: { config: QuizConfig }) {
                 <ChevronLeftIcon />
               </Link>
               <h1 className={styles.title}>
-                <span className={styles.bookTitle}>{wordbook.label}</span>
+                <span className={styles.bookTitle}><MixedLabel text={wordbook.label} /></span>
                 <span className={styles.titleMeta}>
                   <span className={styles.titleRange}>{rangeLabel(currentConfig)}</span>
                   <span className={styles.titleMode}>{modeLabel(currentConfig.mode)}</span>
@@ -215,7 +216,9 @@ export function PrintClient({ config }: { config: QuizConfig }) {
             </div>
 
             <div className={styles.controlRow}>
-              <span className={styles.controlLabel}>1ページあたりの問題数</span>
+              <span className={styles.controlLabel}>
+                <MixedLabel text="1ページあたりの問題数" />
+              </span>
               <div className={styles.pageSizeToggle} role="group" aria-label="1ページあたりの問題数">
                 <span
                   className={`${styles.pageSizeIndicator} ${
@@ -244,7 +247,7 @@ export function PrintClient({ config }: { config: QuizConfig }) {
             </div>
 
             <div className={styles.summary}>
-              <span className={styles.paper}>A4</span>
+              <span className={styles.paper}><MixedLabel text="A4" /></span>
               <span className={styles.counts}>
                 <span>
                   <span className={styles.countValue}>{total}</span>セット

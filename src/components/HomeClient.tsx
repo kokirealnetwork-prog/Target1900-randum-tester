@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import { MixedLabel } from "@/components/MixedLabel";
 import { NumberPill } from "@/components/NumberPill";
 import { DocumentIcon, UpDownChevronsIcon } from "@/components/icons";
 import {
@@ -87,7 +88,7 @@ export function HomeClient({ initialConfig }: { initialConfig: QuizConfig }) {
               onClick={() => setBookMenuOpen((open) => !open)}
             >
               <UpDownChevronsIcon />
-              <span>{book.label}</span>
+              <span><MixedLabel text={book.label} /></span>
             </button>
             {bookMenuOpen ? (
               <div className={styles.bookMenu} role="listbox" aria-label="単語帳を選択">
@@ -103,7 +104,7 @@ export function HomeClient({ initialConfig }: { initialConfig: QuizConfig }) {
                     }`}
                     onClick={() => selectWordbook(option.id)}
                   >
-                    <span>{option.label}</span>
+                    <span><MixedLabel text={option.label} /></span>
                     {!option.available ? <small>データ待ち</small> : null}
                   </button>
                 ))}
