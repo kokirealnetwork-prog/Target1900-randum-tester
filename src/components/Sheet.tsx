@@ -6,6 +6,7 @@ import {
   type QuizQuestion,
   type SheetSpec,
 } from "@/lib/quiz";
+import { getWordbook } from "@/lib/words";
 import styles from "./Sheet.module.css";
 
 /**
@@ -37,6 +38,7 @@ function columnsOf(
 export function Sheet({ sheet, config }: { sheet: SheetSpec; config: QuizConfig }) {
   const showAnswers = sheet.kind === "answer";
   const columns = columnsOf(sheet.questions, config.questionsPerPage);
+  const wordbook = getWordbook(config.wordbook);
 
   return (
     <div
@@ -46,11 +48,14 @@ export function Sheet({ sheet, config }: { sheet: SheetSpec; config: QuizConfig 
     >
       <div className={styles.header}>
         <div className={styles.title}>
-          <span className={styles.range}>{rangeLabel(config)}</span>
-          <span className={styles.count}>
-            <span className={styles.countNumber}>{config.count}</span>
-            <span className={styles.countUnit}>問</span>
-          </span>
+          <span className={styles.bookName}>{wordbook.label}</span>
+          <div className={styles.titleLine}>
+            <span className={styles.range}>{rangeLabel(config)}</span>
+            <span className={styles.count}>
+              <span className={styles.countNumber}>{config.count}</span>
+              <span className={styles.countUnit}>問</span>
+            </span>
+          </div>
         </div>
 
         <div className={styles.brand}>
