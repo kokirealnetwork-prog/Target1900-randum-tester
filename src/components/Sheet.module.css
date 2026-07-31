@@ -65,12 +65,14 @@
 }
 
 .brand {
-  color: #aaaab0;
-  font-size: 7.5pt;
-  line-height: 0.95;
-  letter-spacing: 0.03em;
-  text-align: left;
-  white-space: nowrap;
+  display: flex;
+  align-items: center;
+}
+
+.brand img {
+  display: block;
+  width: 22mm;
+  height: auto;
 }
 
 .pageNo {

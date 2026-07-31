@@ -1,3 +1,4 @@
+import Image from "next/image";
 import {
   COLUMNS_PER_PAGE,
   rangeLabel,
@@ -52,10 +53,13 @@ export function Sheet({ sheet, config }: { sheet: SheetSpec; config: QuizConfig 
           </span>
         </div>
 
-        <div className={`${styles.brand} brand-font`}>
-          Target 1900
-          <br />
-          randum tester
+        <div className={styles.brand}>
+          <Image
+            src="/brand-yikes-stacked.svg"
+            alt="Target 1900 randum tester"
+            width={85}
+            height={26}
+          />
         </div>
 
         <div className={`${styles.legend} ${showAnswers ? styles.legendAnswer : ""}`}>

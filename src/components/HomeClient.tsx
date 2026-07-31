@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { NumberPill } from "@/components/NumberPill";
@@ -35,7 +36,15 @@ export function HomeClient({ initialConfig }: { initialConfig: QuizConfig }) {
     <main className={`${styles.page} screen-only`}>
       <div className={styles.shell}>
         <section className={styles.panel}>
-          <h1 className={`${styles.brand} brand-font`}>Target 1900 randum tester</h1>
+          <h1 className={styles.brand}>
+            <Image
+              src="/brand-yikes.svg"
+              alt="Target 1900 randum tester"
+              width={260}
+              height={23}
+              priority
+            />
+          </h1>
 
           <div className={styles.field}>
             <span className={styles.fieldLabel}>範囲</span>
