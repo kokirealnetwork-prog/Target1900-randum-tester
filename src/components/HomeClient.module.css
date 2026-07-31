@@ -63,6 +63,7 @@
   border: none;
   background: transparent;
   color: var(--blue);
+  font-family: var(--font-numeric), "Gen Interface JP", sans-serif;
   font-size: clamp(17px, 5vw, 20px);
   font-weight: 600;
   text-align: center;
