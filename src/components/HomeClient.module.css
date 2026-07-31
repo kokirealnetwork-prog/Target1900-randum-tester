@@ -35,7 +35,7 @@
 }
 
 .brand {
-  margin: 0 0 28px;
+  margin: 0 0 18px;
 }
 
 .brand img {
@@ -90,7 +90,7 @@
 .bookMenu {
   position: absolute;
   z-index: 60;
-  top: 0;
+  top: 8px;
   right: 22px;
   left: 22px;
   padding: 10px 20px;
