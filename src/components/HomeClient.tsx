@@ -120,7 +120,12 @@ export function HomeClient({ initialConfig }: { initialConfig: QuizConfig }) {
                 value={config.from}
                 min={firstId}
                 max={lastId}
-                onChange={(from) => update({ from })}
+                onChange={(from) => {
+                  // Pills show normalized (sorted) bounds, but draft may still be
+                  // reversed. Pin the other end to the value currently on screen
+                  // so 1500–1500 does not stick as 800–1500 after editing "始め".
+                  update({ from, to: config.to });
+                }}
               />
               <span className={styles.connector} aria-hidden="true">
                 <span className={styles.connectorLine} />
@@ -130,7 +135,9 @@ export function HomeClient({ initialConfig }: { initialConfig: QuizConfig }) {
                 value={config.to}
                 min={firstId}
                 max={lastId}
-                onChange={(to) => update({ to })}
+                onChange={(to) => {
+                  update({ from: config.from, to });
+                }}
               />
             </div>
           </div>
