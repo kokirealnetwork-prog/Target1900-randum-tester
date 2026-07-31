@@ -44,6 +44,7 @@
   justify-content: flex-start;
   gap: 5mm;
   min-width: 0;
+  padding-left: 4mm;
   color: #2f2f36;
   white-space: nowrap;
 }
