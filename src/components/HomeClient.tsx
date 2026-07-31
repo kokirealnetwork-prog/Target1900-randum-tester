@@ -3,7 +3,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { MixedLabel } from "@/components/MixedLabel";
 import { NumberPill } from "@/components/NumberPill";
 import { DocumentIcon, UpDownChevronsIcon } from "@/components/icons";
 import {
@@ -37,8 +36,6 @@ export function HomeClient({ initialConfig }: { initialConfig: QuizConfig }) {
    */
   const [draft, setDraft] = useState<QuizConfig>(initialConfig);
   const config = useMemo(() => normalizeConfig(draft), [draft]);
-  const [bookMenuOpen, setBookMenuOpen] = useState(false);
-  const book = getWordbook(config.wordbook);
   const firstId = firstIdFor();
   const lastId = lastIdFor(config.wordbook);
 
@@ -62,7 +59,6 @@ export function HomeClient({ initialConfig }: { initialConfig: QuizConfig }) {
       to: rangeFitsSelectedBook ? config.to : Math.min(300, selectedLastId),
       count: rangeFitsSelectedBook ? config.count : Math.min(50, selectedLastId),
     });
-    setBookMenuOpen(false);
   };
   const selectMode = (mode: QuizMode) => {
     const activeElement = document.activeElement;
@@ -85,36 +81,19 @@ export function HomeClient({ initialConfig }: { initialConfig: QuizConfig }) {
           </h1>
 
           <div className={styles.bookPicker}>
-            <button
-              type="button"
-              className={styles.bookPickerButton}
-              aria-haspopup="listbox"
-              aria-expanded={bookMenuOpen}
-              onClick={() => setBookMenuOpen((open) => !open)}
+            <UpDownChevronsIcon />
+            <select
+              className={styles.bookSelect}
+              aria-label="単語帳を選択"
+              value={config.wordbook}
+              onChange={(event) => selectWordbook(event.target.value as WordbookId)}
             >
-              <UpDownChevronsIcon />
-              <span><MixedLabel text={book.label} /></span>
-            </button>
-            {bookMenuOpen ? (
-              <div className={styles.bookMenu} role="listbox" aria-label="単語帳を選択">
-                {WORDBOOKS.map((option) => (
-                  <button
-                    key={option.id}
-                    type="button"
-                    role="option"
-                    aria-selected={config.wordbook === option.id}
-                    disabled={!option.available}
-                    className={`${styles.bookMenuOption} ${
-                      config.wordbook === option.id ? styles.bookMenuOptionActive : ""
-                    }`}
-                    onClick={() => selectWordbook(option.id)}
-                  >
-                    <span><MixedLabel text={option.label} /></span>
-                    {!option.available ? <small>データ待ち</small> : null}
-                  </button>
-                ))}
-              </div>
-            ) : null}
+              {WORDBOOKS.map((option) => (
+                <option key={option.id} value={option.id} disabled={!option.available}>
+                  {option.available ? option.label : `${option.label}（データ待ち）`}
+                </option>
+              ))}
+            </select>
           </div>
 
           <div className={styles.field}>
