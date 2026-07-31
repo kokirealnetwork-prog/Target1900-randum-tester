@@ -50,15 +50,8 @@
   width: 100%;
   max-width: 396px;
   margin: 0 auto 24px;
-  border: 2px solid transparent;
-  border-radius: 999px;
   /* Nudge the native menu anchor slightly left of dead center. */
   transform: translateX(-6px);
-}
-
-.bookPicker:focus-within {
-  /* Paint on the wrapper — Safari washes the native <select> focus ring. */
-  border-color: var(--blue);
 }
 
 .bookPicker svg {
@@ -99,10 +92,9 @@
   box-shadow: 0 1px 4px rgba(30, 30, 45, 0.07);
 }
 
-.bookSelect:focus,
 .bookSelect:focus-visible {
-  outline: none;
-  box-shadow: 0 1px 7px rgba(30, 30, 45, 0.09);
+  outline: 2px solid color-mix(in srgb, var(--blue) 45%, transparent);
+  outline-offset: 2px;
 }
 
 .fieldLabel {
