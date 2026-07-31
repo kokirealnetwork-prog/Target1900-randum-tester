@@ -15,7 +15,7 @@ const notoSansJp = Noto_Sans_JP({
 });
 
 export const metadata: Metadata = {
-  title: "Target 1900 randum tester",
+  title: "target1900tester-ver6",
   description: "ターゲット1900の単語からランダムに単語テストを作って印刷できます。",
 };
 

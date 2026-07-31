@@ -316,7 +316,7 @@ export function PrintClient({ config }: { config: QuizConfig }) {
               onClick={handlePrint}
             >
               <PrinterIcon />
-              <span>{preparingPdf ? "PDF作成中…" : "印刷"}</span>
+              <span>{preparingPdf ? "PDF作成中…" : "印刷（PDF）"}</span>
             </button>
           </div>
         </div>

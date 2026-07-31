@@ -8,11 +8,12 @@ const base = {
   strokeLinejoin: "round" as const,
 };
 
-export function PencilIcon({ className }: IconProps) {
+export function DocumentIcon({ className }: IconProps) {
   return (
     <svg className={className} viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" {...base}>
-      <path d="M4 20h4l10.5-10.5a2.1 2.1 0 0 0-3-3L5 17v3Z" />
-      <path d="M13.5 6.5l4 4" />
+      <path d="M6.5 3.5h7l4 4v13h-11z" />
+      <path d="M13.5 3.5v4h4" />
+      <path d="M9 12h6M9 15.5h6" />
     </svg>
   );
 }

@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { NumberPill } from "@/components/NumberPill";
-import { PencilIcon } from "@/components/icons";
+import { DocumentIcon } from "@/components/icons";
 import {
   encodeConfig,
   normalizeConfig,
@@ -124,7 +124,7 @@ export function HomeClient({ initialConfig }: { initialConfig: QuizConfig }) {
 
       <div className={styles.floatingBar}>
         <Link className={styles.primaryButton} href={`/print?${encodeConfig(config)}`}>
-          <PencilIcon />
+          <DocumentIcon />
           <span>テストを作成</span>
         </Link>
       </div>
