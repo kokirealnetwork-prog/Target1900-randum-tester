@@ -1,6 +1,7 @@
 .page {
   min-height: 100dvh;
-  padding-bottom: 120px;
+  min-height: 100svh;
+  padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px));
 }
 
 .shell {
@@ -12,10 +13,10 @@
   position: sticky;
   z-index: 30;
   top: 0;
-  padding: 14px 16px 22px;
+  padding: max(14px, env(safe-area-inset-top, 0px)) 16px 22px;
   border-radius: 0 0 var(--radius-card) var(--radius-card);
-  background: rgba(250, 250, 251, 0.96);
-  box-shadow: 0 2px 7px rgba(30, 30, 45, 0.1);
+  background: #fafafb;
+  box-shadow: 0 1px 2px rgba(30, 30, 45, 0.07);
   backdrop-filter: blur(20px) saturate(150%);
   -webkit-backdrop-filter: blur(20px) saturate(150%);
 }
@@ -253,7 +254,9 @@
   left: 0;
   display: flex;
   justify-content: center;
-  padding: 18px 16px 22px;
+  padding:
+    12px 16px
+    max(12px, calc(env(safe-area-inset-bottom, 0px) + 6px));
   background: linear-gradient(to top, var(--bg) 58%, rgba(244, 244, 246, 0));
   pointer-events: none;
 }
@@ -352,7 +355,7 @@
 
 @media (max-width: 430px) {
   .panel {
-    padding: 14px 16px 22px;
+    padding: max(14px, env(safe-area-inset-top, 0px)) 16px 22px;
   }
 
   .controlRow {
