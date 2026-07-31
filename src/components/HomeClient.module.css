@@ -71,7 +71,7 @@
   width: 100%;
   min-height: 72px;
   padding: 0 44px 0 40px;
-  border: none;
+  border: 2px solid transparent;
   border-radius: 999px;
   background: #ffffff;
   box-shadow: 0 1px 7px rgba(30, 30, 45, 0.09);
@@ -94,8 +94,11 @@
 
 .bookSelect:focus,
 .bookSelect:focus-visible {
-  outline: 2px solid var(--blue);
-  outline-offset: 2px;
+  /* Safari ignores outline on <select>; paint an opaque ring with the app blue. */
+  outline: none;
+  border-color: #4d7cfd;
+  box-shadow: 0 1px 7px rgba(30, 30, 45, 0.09);
+  -webkit-focus-ring-color: #4d7cfd;
 }
 
 .fieldLabel {
