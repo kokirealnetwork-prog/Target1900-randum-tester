@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { MixedLabel } from "@/components/MixedLabel";
 import { NumberPill } from "@/components/NumberPill";
 import { DocumentIcon, UpDownChevronsIcon } from "@/components/icons";
@@ -28,6 +28,10 @@ const MODE_OPTIONS: { mode: QuizMode; label: string }[] = [
   { mode: "ja-en", label: "日本語からEN" },
 ];
 
+function reloadWithConfig(config: QuizConfig) {
+  window.location.replace(`/?${encodeConfig(config)}`);
+}
+
 export function HomeClient({ initialConfig }: { initialConfig: QuizConfig }) {
   /**
    * Kept unclamped on purpose: narrowing the range temporarily caps the question
@@ -46,6 +50,25 @@ export function HomeClient({ initialConfig }: { initialConfig: QuizConfig }) {
     [config.wordbook, config.from, config.to],
   );
   const update = (patch: Partial<QuizConfig>) => setDraft((current) => ({ ...current, ...patch }));
+
+  // URL が from > to（例: 300–1）のときは 1–300 に直して再ロードする。
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const rawFrom = Number(params.get("from"));
+    const rawTo = Number(params.get("to"));
+    if (!Number.isFinite(rawFrom) || !Number.isFinite(rawTo) || rawFrom <= rawTo) return;
+    reloadWithConfig(initialConfig);
+  }, [initialConfig]);
+
+  /** 範囲を更新。逆転したら小さい方→大きい方に入れ替えて再ロードする。 */
+  const applyRange = (from: number, to: number) => {
+    if (from > to) {
+      reloadWithConfig(normalizeConfig({ ...draft, from, to }));
+      return;
+    }
+    update({ from, to });
+  };
+
   const selectWordbook = (wordbook: WordbookId) => {
     const selected = getWordbook(wordbook);
     if (!selected.available) return;
@@ -121,10 +144,9 @@ export function HomeClient({ initialConfig }: { initialConfig: QuizConfig }) {
                 min={firstId}
                 max={lastId}
                 onChange={(from) => {
-                  // Pills show normalized (sorted) bounds, but draft may still be
-                  // reversed. Pin the other end to the value currently on screen
-                  // so 1500–1500 does not stick as 800–1500 after editing "始め".
-                  update({ from, to: config.to });
+                  // Pin the other end to the on-screen value so draft cannot drift
+                  // away from what the pills show.
+                  applyRange(from, config.to);
                 }}
               />
               <span className={styles.connector} aria-hidden="true">
@@ -136,7 +158,7 @@ export function HomeClient({ initialConfig }: { initialConfig: QuizConfig }) {
                 min={firstId}
                 max={lastId}
                 onChange={(to) => {
-                  update({ from: config.from, to });
+                  applyRange(config.from, to);
                 }}
               />
             </div>
