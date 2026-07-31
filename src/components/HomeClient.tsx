@@ -49,11 +49,12 @@ export function HomeClient({ initialConfig }: { initialConfig: QuizConfig }) {
     const selected = getWordbook(wordbook);
     if (!selected.available) return;
     const selectedLastId = lastIdFor(wordbook);
+    const rangeFitsSelectedBook = config.from >= firstIdFor() && config.to <= selectedLastId;
     update({
       wordbook,
-      from: firstIdFor(),
-      to: Math.min(300, selectedLastId),
-      count: Math.min(50, selectedLastId),
+      from: rangeFitsSelectedBook ? config.from : firstIdFor(),
+      to: rangeFitsSelectedBook ? config.to : Math.min(300, selectedLastId),
+      count: rangeFitsSelectedBook ? config.count : Math.min(50, selectedLastId),
     });
     setBookMenuOpen(false);
   };
