@@ -55,7 +55,7 @@
 .bookPicker svg {
   position: absolute;
   top: 50%;
-  left: 27px;
+  left: 16px;
   z-index: 1;
   width: 18px;
   height: 18px;
@@ -68,7 +68,7 @@
   display: block;
   width: 100%;
   min-height: 72px;
-  padding: 0 44px 0 52px;
+  padding: 0 44px 0 40px;
   border: none;
   border-radius: 999px;
   background: #ffffff;

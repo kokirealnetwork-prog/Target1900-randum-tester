@@ -90,7 +90,7 @@ export function HomeClient({ initialConfig }: { initialConfig: QuizConfig }) {
             >
               {WORDBOOKS.map((option) => (
                 <option key={option.id} value={option.id} disabled={!option.available}>
-                  {option.available ? option.shortLabel : `${option.shortLabel}（データ待ち）`}
+                  {option.available ? option.label : `${option.label}（データ待ち）`}
                 </option>
               ))}
             </select>
