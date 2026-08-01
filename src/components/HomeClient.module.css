@@ -89,9 +89,9 @@
   background: #fbfbfc;
 }
 
+.bookSelect:focus,
 .bookSelect:focus-visible {
-  outline: 2px solid color-mix(in srgb, #3a3a40 35%, transparent);
-  outline-offset: 2px;
+  outline: none;
 }
 
 .fieldLabel {
