@@ -69,11 +69,11 @@
   width: 100%;
   min-height: 72px;
   padding: 0 44px 0 52px;
-  border: 1.5px solid #222227;
+  border: 1.5px solid #3a3a40;
   border-radius: 999px;
   background: #ffffff;
-  box-shadow: 0 1px 7px rgba(30, 30, 45, 0.09);
-  color: var(--text-strong);
+  box-shadow: none;
+  color: #3a3a40;
   font-size: clamp(14px, 4.8vw, 19px);
   font-weight: 600;
   line-height: 1.2;
@@ -87,11 +87,10 @@
 
 .bookSelect:active {
   background: #fbfbfc;
-  box-shadow: 0 1px 4px rgba(30, 30, 45, 0.07);
 }
 
 .bookSelect:focus-visible {
-  outline: 2px solid color-mix(in srgb, #222227 35%, transparent);
+  outline: 2px solid color-mix(in srgb, #3a3a40 35%, transparent);
   outline-offset: 2px;
 }
 
