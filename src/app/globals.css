@@ -1,11 +1,11 @@
 :root {
-  --blue: #4d7cfd;
-  --blue-dark: #3d6cf0;
-  --blue-soft: #e8eeff;
-  --bg: #f4f4f6;
+  --blue: #5b7fff;
+  --blue-dark: #4a6cf0;
+  --blue-soft: #e9eeff;
+  --bg: #f2f2f4;
   --card: #ffffff;
-  --text: #3c3c43;
-  --text-strong: #2b2b31;
+  --text: #333333;
+  --text-strong: #222227;
   --muted: #b5b5bd;
   --muted-strong: #8e8e96;
   --line: #e6e6ea;
@@ -29,7 +29,7 @@ body {
 }
 
 html {
-  background: #fafafb;
+  background: #f7f7f7;
 }
 
 body {
