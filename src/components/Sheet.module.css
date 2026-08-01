@@ -78,7 +78,7 @@
 .pageNoTotal,
 .rowNo,
 .wordId {
-  font-family: var(--font-numeric), "Gen Interface JP", sans-serif;
+  font-family: var(--font-numeric), var(--font-jp), sans-serif;
   font-variant-numeric: tabular-nums;
 }
 

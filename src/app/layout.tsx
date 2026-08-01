@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Google_Sans_Flex } from "next/font/google";
+import { Google_Sans_Flex, Noto_Sans_JP } from "next/font/google";
 import "./globals.css";
 
 const googleSansFlex = Google_Sans_Flex({
@@ -8,6 +8,14 @@ const googleSansFlex = Google_Sans_Flex({
   subsets: ["latin"],
   display: "swap",
   adjustFontFallback: false,
+});
+
+const notoSansJp = Noto_Sans_JP({
+  variable: "--font-jp",
+  weight: ["400", "500", "600", "700"],
+  subsets: ["latin"],
+  display: "swap",
+  preload: true,
 });
 
 export const metadata: Metadata = {
@@ -25,18 +33,8 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ja">
-      <head>
-        <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="anonymous" />
-        {[400, 500, 600, 700].map((weight) => (
-          <link
-            key={weight}
-            rel="stylesheet"
-            href={`https://cdn.jsdelivr.net/npm/gen-interface-jp@0.8.0/cdn/${weight}.css`}
-          />
-        ))}
-      </head>
-      <body className={googleSansFlex.variable}>{children}</body>
+    <html lang="ja" className={`${googleSansFlex.variable} ${notoSansJp.variable}`}>
+      <body>{children}</body>
     </html>
   );
 }

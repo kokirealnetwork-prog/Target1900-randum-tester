@@ -3,9 +3,9 @@ import styles from "./MixedLabel.module.css";
 const NUMBER_PART = /^\d+$/;
 
 /**
- * Keeps Japanese and Latin text in Gen Interface JP while assigning only
- * standalone digit runs to Google Sans Flex. Do not use this for word data:
- * digits that are part of an English word must stay in Inter.
+ * Marks standalone digit runs for tabular Google Sans Flex. Japanese already
+ * falls through to Noto Sans JP via the root stack. Do not use for word data:
+ * digits inside an English word should stay with the surrounding Latin face.
  */
 export function MixedLabel({ text }: { text: string }) {
   return text.split(/(\d+)/).map((part, index) =>

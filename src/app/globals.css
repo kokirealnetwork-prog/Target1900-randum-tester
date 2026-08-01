@@ -35,7 +35,8 @@ html {
 body {
   background: var(--bg);
   color: var(--text);
-  font-family: "Gen Interface JP", system-ui, sans-serif;
+  /* Latin/digits → Google Sans Flex; Japanese falls through to Noto Sans JP. */
+  font-family: var(--font-numeric), var(--font-jp), system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -webkit-text-size-adjust: 100%;
 }
